@@ -1,18 +1,18 @@
 package EntityClasses;
 
-public class User implements EntityType{
+public class User implements EntityType<User>{
     @Override
-    public boolean InsertEntity(Object entity) {
+    public boolean InsertEntity(User entity) {
         return false;
     }
 
     @Override
-    public boolean DeleteEntity(Object entity) {
+    public boolean DeleteEntity(User entity) {
         return false;
     }
 
     @Override
-    public boolean UpdateEntity(Object oldEntity, Object newEntity) {
+    public boolean UpdateEntity(User oldEntity, User newEntity) {
         return false;
     }
 }

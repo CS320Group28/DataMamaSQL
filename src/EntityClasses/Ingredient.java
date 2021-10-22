@@ -1,18 +1,18 @@
 package EntityClasses;
 
-public class Ingredient implements EntityType{
+public class Ingredient implements EntityType<Ingredient>{
     @Override
-    public boolean InsertEntity(Object entity) {
+    public boolean InsertEntity(Ingredient entity) {
         return false;
     }
 
     @Override
-    public boolean DeleteEntity(Object entity) {
+    public boolean DeleteEntity(Ingredient entity) {
         return false;
     }
 
     @Override
-    public boolean UpdateEntity(Object oldEntity, Object newEntity) {
+    public boolean UpdateEntity(Ingredient oldEntity, Ingredient newEntity) {
         return false;
     }
 }
