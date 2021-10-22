@@ -18,8 +18,10 @@ public class PostgresSSHTest {
 
         Connection conn = null;
         Session session = null;
+        //boolean for checking if the connection is successful
         boolean connect = false;
 
+        //connection loop for entering the user login info
         while(!connect) {
 
             ArrayList<String> userLogin = getLogin();
@@ -68,12 +70,14 @@ public class PostgresSSHTest {
                     session.disconnect();
                 }
             }
+            //if the connection did not fail, exit the loop
             if(conn != null){
                 connect = true;
             }
         }
     }
 
+    //user to get the login info, returns an arraylist with the username at index 0 and the password at index 1
     public static ArrayList<String> getLogin(){
         Scanner scan = new Scanner(System.in);
 
