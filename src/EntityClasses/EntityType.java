@@ -11,14 +11,18 @@ public interface EntityType<T> {
      * @param entity
      * @return
      */
-    public boolean InsertEntity(T entity);
+    default public boolean InsertEntity(T entity){
+        throw new UnsupportedOperationException();
+    }
 
     /**
      * Delete an entity from the table.
      * @param entity
      * @return
      */
-    public boolean DeleteEntity(T entity);
+    default public boolean DeleteEntity(T entity){
+        throw new UnsupportedOperationException();
+    }
 
     /**
      * Update an entity for a given EntityClasses.EntityType.
