@@ -1,4 +1,4 @@
-// file: EntityType.java
+package EntityClasses;// file: EntityClasses.EntityType.java
 //
 
 /**
@@ -21,7 +21,7 @@ public interface EntityType<T> {
     public boolean DeleteEntity(T entity);
 
     /**
-     * Update an entity for a given EntityType. 
+     * Update an entity for a given EntityClasses.EntityType.
      * @param entity
      * @return
      */
