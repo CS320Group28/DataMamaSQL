@@ -7,6 +7,9 @@ import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.SQLException;
 import java.util.Properties;
+import java.sql.Statement;
+import java.sql.ResultSet;
+import java.time.LocalDate;
 
 public class PostgresSSHTest {
 
@@ -20,6 +23,8 @@ public class PostgresSSHTest {
         Session session = null;
         //boolean for checking if the connection is successful
         boolean connect = false;
+        Statement stmt = null;
+        ResultSet rs = null;
 
         //connection loop for entering the user login info
         while(!connect) {
@@ -54,6 +59,22 @@ public class PostgresSSHTest {
                 Class.forName(driverName);
                 conn = DriverManager.getConnection(url, props);
                 System.out.println("Database connection established");
+
+                /* Simple SQL Statement example
+                try{
+                    //Executing a simple SQL statement in java
+                    stmt = conn.createStatement();
+                    String dstring = java.time.LocalDate.now().toString();
+                    stmt.executeUpdate("insert into \"User\"" + " values( 'test',"+ "'" + dstring +"'" +", '12345'," + "'" + dstring +"'"+");");
+                    System.out.println("inserted one new user into the user table");
+
+                } catch (SQLException ex){
+                    System.out.println("ERROR:");
+                    System.out.println("\t" +ex.toString());
+                }
+
+                 */
+
 
                 // Do something with the database....
 
