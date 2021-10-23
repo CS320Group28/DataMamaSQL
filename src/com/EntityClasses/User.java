@@ -1,18 +1,25 @@
 package com.EntityClasses;
 
 import java.time.LocalDateTime;
+import java.util.Map;
+
+import com.DBInterface;
 
 public class User implements EntityType<User>{
     private String username;
     private String password;
     private LocalDateTime creationDate;
     private LocalDateTime lastAccessDate;
-
-    public User(String username, String password){
-        this.username = username;
-        this.password = password;
-        creationDate = LocalDateTime.now();
-        lastAccessDate = creationDate;
+    private DBInterface db;
+    public User(DBInterface db){
+        this.db = db;
+    }
+    @Override
+    public void configEntity(Map<String, Object> attributes) {
+        this.username = (String) attributes.get("Username");
+        this.password = (String) attributes.get("Password");
+        this.creationDate = LocalDateTime.now();
+        lastAccessDate = creationDate;        
     }
 
     public void setUserName(String username){
@@ -48,17 +55,18 @@ public class User implements EntityType<User>{
     }
 
     @Override
-    public boolean InsertEntity(User entity) {
+    public boolean InsertEntity(DBInterface db) {
         return false;
     }
 
     @Override
-    public boolean DeleteEntity(User entity) {
+    public boolean DeleteEntity(DBInterface db) {
         return false;
     }
 
     @Override
-    public boolean UpdateEntity(User oldEntity, User newEntity) {
+    public boolean UpdateEntity(DBInterface db, User oldUser) {
         return false;
     }
+
 }
