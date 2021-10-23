@@ -15,17 +15,17 @@ public class Ingredient implements EntityType<Ingredient>{
     }
 
     @Override
-    public boolean InsertEntity(DBInterface db) {
+    public boolean InsertEntity() {
         return false;
     }
 
     @Override
-    public boolean DeleteEntity(DBInterface db) {
+    public boolean DeleteEntity() {
         return false;
     }
 
     @Override
-    public boolean UpdateEntity(DBInterface db, Ingredient oldEntity) {
+    public boolean UpdateEntity(Ingredient oldEntity) {
         return false;
     }
 

@@ -34,6 +34,8 @@ public class Recipe implements EntityType<Recipe>{
     }
 
     //for making a new recipe, where the recipe ID has not been determined by the table yet.
+
+    /** 
     public Recipe(String recipeName, String steps, int rating, String description, float servings, int cookTime, int difficulty, LocalDateTime creationDate){
         Objects.requireNonNull(recipeName, "Recipe Name must not be null");
         Objects.requireNonNull(steps, "steps must not be null");
@@ -70,6 +72,8 @@ public class Recipe implements EntityType<Recipe>{
         this.difficulty = Difficulty.values()[difficulty];
         this.creationDate = creationDate;
     }
+    */
+    
 
 
     /**
@@ -77,8 +81,17 @@ public class Recipe implements EntityType<Recipe>{
      */
     @Override
     public void configEntity(Map<String, Object> attributes) {
-        // TODO Auto-generated method stub
-        
+        int difficulty = (int) attributes.get("difficulty");
+        if(difficulty < 0 || difficulty > 4)
+            throw new IndexOutOfBoundsException();
+        this.difficulty = Difficulty.values()[difficulty];
+        this.recipeID = (int) attributes.get("recipeID");
+        this.recipeName = (String) attributes.get("recipeName");
+        this.cookTime = (int) attributes.get("cookTime");
+        this.steps = (String) attributes.get("steps");
+        this.rating = (int) attributes.get("rating");
+        this.description = (String) attributes.get("description");
+        this.creationDate = (LocalDateTime) attributes.get("creationDate");
     }
     //endregion
 
@@ -159,23 +172,24 @@ public class Recipe implements EntityType<Recipe>{
 
     //used for creating the recipe / inserting into the database
     @Override
-    public boolean InsertEntity(DBInterface db) {
+    public boolean InsertEntity() {
         //this is where the new recipe will be added to the database
         return false;
     }
 
     @Override
-    public boolean DeleteEntity(DBInterface db) {
+    public boolean DeleteEntity() {
         return false;
     }
 
     @Override
-    public boolean UpdateEntity(DBInterface db, Recipe oldRecipe) {
+    public boolean UpdateEntity(Recipe oldRecipe) {
         return false;
     }
 
     public static void main(String[] args) {
-        new Recipe(1, "recipeName", "steps", 1, "description",2, 5, 6, LocalDateTime.now());
+        //new Recipe(1, "recipeName", "steps", 1, "description",2, 5, 6, LocalDateTime.now());
+        
     }
 
 }

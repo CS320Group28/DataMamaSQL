@@ -17,7 +17,7 @@ public interface EntityType<T> {
      * @param entity
      * @return
      */
-    default public boolean InsertEntity(DBInterface db){
+    default public boolean InsertEntity(){
         throw new UnsupportedOperationException();
     }
 
@@ -26,7 +26,7 @@ public interface EntityType<T> {
      * @param entity
      * @return
      */
-    default public boolean DeleteEntity(DBInterface db){
+    default public boolean DeleteEntity(){
         throw new UnsupportedOperationException();
     }
 
@@ -35,7 +35,7 @@ public interface EntityType<T> {
      * @param oldEntity,newEntity
      * @return
      */
-    default public boolean UpdateEntity(DBInterface db, T oldEntity){
+    default public boolean UpdateEntity(T oldEntity){
         throw new UnsupportedOperationException();
     }
 

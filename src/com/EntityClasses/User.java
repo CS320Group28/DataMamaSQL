@@ -55,17 +55,17 @@ public class User implements EntityType<User>{
     }
 
     @Override
-    public boolean InsertEntity(DBInterface db) {
+    public boolean InsertEntity() {
         return false;
     }
 
     @Override
-    public boolean DeleteEntity(DBInterface db) {
+    public boolean DeleteEntity() {
         return false;
     }
 
     @Override
-    public boolean UpdateEntity(DBInterface db, User oldUser) {
+    public boolean UpdateEntity(User oldUser) {
         return false;
     }
 

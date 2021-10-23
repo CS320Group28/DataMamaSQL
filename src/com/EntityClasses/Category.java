@@ -41,19 +41,19 @@ public class Category implements EntityType<Category>{
     }
 
     @Override
-    public boolean InsertEntity(DBInterface db) {
+    public boolean InsertEntity() {
 
 
         return false;
     }
 
     @Override
-    public boolean DeleteEntity(DBInterface db) {
+    public boolean DeleteEntity() {
         return false;
     }
 
     @Override
-    public boolean UpdateEntity(DBInterface db, Category oldCategory) {
+    public boolean UpdateEntity(Category oldCategory) {
         return false;
     }
 }
