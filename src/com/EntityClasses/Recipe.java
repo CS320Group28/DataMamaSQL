@@ -26,8 +26,12 @@ public class Recipe implements EntityType<Recipe>{
     private Difficulty difficulty;
     private LocalDateTime creationDate;
 
-
+    private DBInterface db;
     //region Constructors
+
+    public Recipe(DBInterface db){
+        this.db = db;
+    }
 
     //for making a new recipe, where the recipe ID has not been determined by the table yet.
     public Recipe(String recipeName, String steps, int rating, String description, float servings, int cookTime, int difficulty, LocalDateTime creationDate){
@@ -67,6 +71,10 @@ public class Recipe implements EntityType<Recipe>{
         this.creationDate = creationDate;
     }
 
+
+    /**
+     * TODO: MAKE THIS ACTUALLY DO THINGS
+     */
     @Override
     public void configEntity(Map<String, Object> attributes) {
         // TODO Auto-generated method stub
