@@ -1,0 +1,7 @@
+{
+    "java.project.referencedLibraries": [
+        "lib/**/*.jar",
+        "c:\\Users\\jrcca\\source\\DataMamaSQL\\jsch-0.1.55.jar",
+        "c:\\Users\\jrcca\\source\\DataMamaSQL\\postgresql-42.2.24.jar"
+    ]
+}
