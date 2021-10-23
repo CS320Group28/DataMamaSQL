@@ -26,7 +26,7 @@ public interface EntityType<T> {
 
     /**
      * Update an entity for a given EntityClasses.EntityType.
-     * @param entity
+     * @param oldEntity,newEntity
      * @return
      */
     default public boolean UpdateEntity(T oldEntity, T newEntity){
