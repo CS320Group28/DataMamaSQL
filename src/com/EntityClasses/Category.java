@@ -1,11 +1,22 @@
-package EntityClasses;
+package com.EntityClasses;
+
+import java.util.Map;
+
+import com.DBInterface;
 
 public class Category implements EntityType<Category>{
     private String categoryName;
     private int categoryID;
+    private DBInterface db;
+    public Category(DBInterface db){
+        this.db = db;
+    }
 
-    public Category(String categoryName){
-        this.categoryName=categoryName;
+    
+    @Override
+    public void configEntity(Map<String, Object> attributes) {
+        this.categoryID = (int) attributes.get("categoryID");
+        this.categoryName = (String) attributes.get("categoryName");
     }
 
     public Category(String categoryName, int categoryID){
@@ -30,22 +41,19 @@ public class Category implements EntityType<Category>{
     }
 
     @Override
-    public boolean InsertEntity(Category entity) {
+    public boolean InsertEntity(DBInterface db) {
 
 
         return false;
     }
 
     @Override
-    public boolean DeleteEntity(Category entity) {
+    public boolean DeleteEntity(DBInterface db) {
         return false;
     }
 
     @Override
-    public boolean UpdateEntity(Category oldEntity, Category newEntity) {
+    public boolean UpdateEntity(DBInterface db, Category oldCategory) {
         return false;
     }
-
-
-
 }

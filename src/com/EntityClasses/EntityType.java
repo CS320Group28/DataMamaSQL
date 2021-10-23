@@ -1,17 +1,23 @@
-package EntityClasses;// file: EntityClasses.EntityType.java
+package com.EntityClasses;// file: EntityClasses.EntityType.java
 //
+
+import java.util.Map;
+
+import com.DBInterface;
 
 /**
  * This interface will be implemented by all Entity Type classes.
  */
 public interface EntityType<T> {
 
+    public void configEntity(Map<String, Object> attributes);
+
     /**
      * Insert a new entity into the table.
      * @param entity
      * @return
      */
-    default public boolean InsertEntity(T entity){
+    default public boolean InsertEntity(DBInterface db){
         throw new UnsupportedOperationException();
     }
 
@@ -20,7 +26,7 @@ public interface EntityType<T> {
      * @param entity
      * @return
      */
-    default public boolean DeleteEntity(T entity){
+    default public boolean DeleteEntity(DBInterface db){
         throw new UnsupportedOperationException();
     }
 
@@ -29,7 +35,7 @@ public interface EntityType<T> {
      * @param oldEntity,newEntity
      * @return
      */
-    default public boolean UpdateEntity(T oldEntity, T newEntity){
+    default public boolean UpdateEntity(DBInterface db, T oldEntity){
         throw new UnsupportedOperationException();
     }
 

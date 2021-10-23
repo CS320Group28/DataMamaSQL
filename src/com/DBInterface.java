@@ -1,3 +1,5 @@
+package com;
+
 import java.io.BufferedReader;
 import java.io.FileNotFoundException;
 import java.io.FileReader;
@@ -15,7 +17,7 @@ import com.jcraft.jsch.Session;
 // file: DBInterface.java
 // Class for setting up and interacting with DB
 
-class DBInterface{
+public class DBInterface{
     private static final String DBNAME = "p320_30";
     private Connection connection;
     
@@ -23,8 +25,7 @@ class DBInterface{
         try(
             BufferedReader br = new BufferedReader(
                 new FileReader("config.txt")
-            )
-                
+            )    
         ){
             String user = br.readLine();
             String password = br.readLine();

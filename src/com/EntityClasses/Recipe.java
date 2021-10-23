@@ -1,7 +1,10 @@
-package EntityClasses;
+package com.EntityClasses;
 
 import java.time.LocalDateTime;
+import java.util.Map;
 import java.util.Objects;
+
+import com.DBInterface;
 
 public class Recipe implements EntityType<Recipe>{
 
@@ -62,6 +65,12 @@ public class Recipe implements EntityType<Recipe>{
         this.servings = servings;
         this.difficulty = Difficulty.values()[difficulty];
         this.creationDate = creationDate;
+    }
+
+    @Override
+    public void configEntity(Map<String, Object> attributes) {
+        // TODO Auto-generated method stub
+        
     }
     //endregion
 
@@ -142,22 +151,23 @@ public class Recipe implements EntityType<Recipe>{
 
     //used for creating the recipe / inserting into the database
     @Override
-    public boolean InsertEntity(Recipe entity) {
+    public boolean InsertEntity(DBInterface db) {
         //this is where the new recipe will be added to the database
         return false;
     }
 
     @Override
-    public boolean DeleteEntity(Recipe entity) {
+    public boolean DeleteEntity(DBInterface db) {
         return false;
     }
 
     @Override
-    public boolean UpdateEntity(Recipe oldEntity, Recipe newEntity) {
+    public boolean UpdateEntity(DBInterface db, Recipe oldRecipe) {
         return false;
     }
 
     public static void main(String[] args) {
         new Recipe(1, "recipeName", "steps", 1, "description",2, 5, 6, LocalDateTime.now());
     }
+
 }
