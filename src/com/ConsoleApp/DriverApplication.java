@@ -3,6 +3,7 @@ import java.util.Scanner;
 
 import com.*;
 import com.ConsoleApp.CommandClasses.CreateAccount;
+import com.ConsoleApp.CommandClasses.CreateCategory;
 
 public class DriverApplication {
 
@@ -18,11 +19,17 @@ public class DriverApplication {
 
 
     public static void main (String[] args){
+
+
         while(true) {
+
             System.out.print("Enter command: ");
             String command = scan.nextLine();
             if (command.equals("register")) {
                 CreateAccount.CreateAccountCLI(db);
+            }
+            if (command.equals("add category")){
+                CreateCategory.CreateCategoryCLI(db);
             }
         }
     }

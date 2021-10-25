@@ -1,5 +1,7 @@
 package com.EntityClasses;
 
+import java.sql.PreparedStatement;
+import java.sql.SQLException;
 import java.util.Map;
 
 import com.DBInterface;
@@ -15,7 +17,6 @@ public class Category implements EntityType<Category>{
     
     @Override
     public void configEntity(Map<String, Object> attributes) {
-        this.categoryID = (int) attributes.get("categoryID");
         this.categoryName = (String) attributes.get("categoryName");
     }
 
@@ -42,9 +43,17 @@ public class Category implements EntityType<Category>{
 
     @Override
     public boolean InsertEntity() {
+        PreparedStatement stmt = db.getStatement("INSERT INTO \"Category\"(\"CategoryName\") VALUES(?)");
+        try{
+            stmt.setString(1, categoryName);
+            db.execStatementQuery(stmt);
+        } catch(SQLException e){
+            e.getMessage();
+            return false;
+        }
+        return true;
 
 
-        return false;
     }
 
     @Override
