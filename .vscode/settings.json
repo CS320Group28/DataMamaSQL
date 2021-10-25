@@ -1,7 +1,0 @@
-{
-    "java.project.referencedLibraries": [
-        "lib/**/*.jar",
-        "c:\\Users\\jrcca\\source\\jsch-0.1.55.jar",
-        "c:\\Users\\jrcca\\source\\postgresql-42.2.24.jar"
-    ]
-}
