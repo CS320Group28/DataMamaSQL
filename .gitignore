@@ -2,5 +2,5 @@
 .idea
 *.iml
 out
-src/com/config.txt
+src/com/config
 .vscode
