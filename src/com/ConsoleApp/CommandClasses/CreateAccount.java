@@ -44,6 +44,7 @@ public class CreateAccount {
             }
             
             user.InsertEntity();
+            System.out.println("User Successfully Created");
             return;
 
         }

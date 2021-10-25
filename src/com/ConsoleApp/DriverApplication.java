@@ -19,17 +19,45 @@ public class DriverApplication {
 
 
     public static void main (String[] args){
+        boolean close = false;
+        int select;
+        Scanner scan = new Scanner(System.in);
+        System.out.println("Welcome to the Recipe App!");
+        while (!close) {
+            System.out.println("\t1. Add User");
+            System.out.println("\t2. Add Category");
 
 
-        while(true) {
 
-            System.out.print("Enter command: ");
-            String command = scan.nextLine();
-            if (command.equals("register")) {
-                CreateAccount.CreateAccountCLI(db);
-            }
-            if (command.equals("add category")){
-                CreateCategory.CreateCategoryCLI(db);
+
+
+
+            System.out.println("\t100. Exit");
+            try {
+                System.out.print(">> ");
+                select = scan.nextInt();
+                switch (select) {
+                    case 1:
+                        System.out.println("creating new user...");
+                        CreateAccount.CreateAccountCLI(db);
+                        break;
+                    case 2:
+                        System.out.println("creating new category...");
+                        CreateCategory.CreateCategoryCLI(db);
+                        break;
+
+                    case 100:
+                        scan.close();
+                        db.endSSH();
+                        close = true;
+                        break;
+                    default:
+                        System.out.println(select + " is not an option.");
+                        break;
+                }
+            } catch (Exception e) {
+                scan.nextLine();
+                System.out.println("Enter the number of the list item.");
             }
         }
     }
