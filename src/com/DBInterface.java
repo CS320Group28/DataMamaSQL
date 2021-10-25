@@ -6,6 +6,7 @@ import java.io.FileReader;
 import java.io.IOException;
 import java.sql.Connection;
 import java.sql.DriverManager;
+import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
@@ -65,19 +66,25 @@ public class DBInterface{
         }catch(IOException e){
             e.printStackTrace();
         }
-        Objects.requireNonNull(connection, "Connection not successfully retrieved");
+        Objects.requireNonNull(this.connection, "Connection not successfully retrieved");
+    }
+    public PreparedStatement getStatement(String statementFormat){
+        try{
+            return connection.prepareStatement(statementFormat);
+        }catch(SQLException e){
+            return null;
+        }
+        
     }
 
-    public ResultSet execStatementQuery(String query) throws SQLException{
-        Statement stmt = this.connection.createStatement();
-        ResultSet rset = stmt.executeQuery(query);
+    public ResultSet execStatementQuery(PreparedStatement stmt) throws SQLException{
+        ResultSet rset = stmt.executeQuery();
         stmt.close();
         return rset;
     }
     
-    public void execStatementUpdate(String sql) throws SQLException{
-        Statement stmt = this.connection.createStatement();
-        stmt.executeUpdate(sql);
+    public void execStatementUpdate(PreparedStatement stmt) throws SQLException{
+        stmt.executeUpdate();
         stmt.close();
     }
 }

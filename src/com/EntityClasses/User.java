@@ -1,5 +1,7 @@
 package com.EntityClasses;
 
+import java.sql.PreparedStatement;
+import java.sql.SQLException;
 import java.time.LocalDateTime;
 import java.util.Map;
 
@@ -56,7 +58,17 @@ public class User implements EntityType<User>{
 
     @Override
     public boolean InsertEntity() {
-        return false;
+        PreparedStatement stmt = db.getStatement("INSERT INTO USER(Username, Password, creationDate, lastAccessDate) VALUES(?, ?, ?, ?)");
+        try{
+            stmt.setString(1, username);
+            stmt.setString(2, password);
+            stmt.setObject(3, creationDate);
+            stmt.setObject(4, lastAccessDate);
+            db.execStatementQuery(stmt);
+        } catch(SQLException e){
+            return false;
+        }
+        return true;
     }
 
     @Override
@@ -67,6 +79,10 @@ public class User implements EntityType<User>{
     @Override
     public boolean UpdateEntity(User oldUser) {
         return false;
+    }
+    public static void main(String[] args) {
+        User user = new User(new DBInterface());
+        user.InsertEntity();
     }
 
 }
