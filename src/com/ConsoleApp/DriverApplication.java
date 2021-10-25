@@ -1,5 +1,8 @@
 package com.ConsoleApp;
+import java.util.Scanner;
+
 import com.*;
+import com.ConsoleApp.CommandClasses.CreateAccount;
 
 public class DriverApplication {
 
@@ -11,10 +14,14 @@ public class DriverApplication {
 
     private static final DBInterface db = new DBInterface();
 
-
+    private static final Scanner scan = new Scanner(System.in);
 
 
     public static void main (String[] args){
-        System.out.println("commands and stuff will go here when done...");
+        System.out.println("Enter command: ");
+        String command = scan.nextLine();
+        if(command.equals("register")){
+            CreateAccount.CreateAccountCLI(db);
+        }
     }
 }
