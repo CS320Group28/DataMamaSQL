@@ -1,2 +1,5 @@
 *.class
-config.txt
+.idea
+*.iml
+out
+src/com/config.txt
