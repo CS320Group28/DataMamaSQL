@@ -18,9 +18,9 @@ public class CreateAccount {
 
         while(true){
 
-            System.out.println("Enter a username: ");
+            System.out.print("Enter a username: ");
             String username = in.next();
-            System.out.println("Enter a password: ");
+            System.out.print("Enter a password: ");
             String password = in.next();
             
             User user = new User(db);
@@ -29,7 +29,7 @@ public class CreateAccount {
             userMap.put("Password", password);
             user.configEntity(userMap);
 
-            PreparedStatement stmt = db.getStatement("Select * From \"user\" where \"Username\" = ?");
+            PreparedStatement stmt = db.getStatement("Select * From \"User\" where \"username\" = ?");
             ResultSet rs = null;
             try {
                 stmt.setString(1, username);
@@ -44,7 +44,7 @@ public class CreateAccount {
             }
             
             user.InsertEntity();
-            break;
+            return;
 
         }
         

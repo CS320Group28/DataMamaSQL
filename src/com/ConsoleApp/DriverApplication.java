@@ -18,10 +18,12 @@ public class DriverApplication {
 
 
     public static void main (String[] args){
-        System.out.println("Enter command: ");
-        String command = scan.nextLine();
-        if(command.equals("register")){
-            CreateAccount.CreateAccountCLI(db);
+        while(true) {
+            System.out.print("Enter command: ");
+            String command = scan.nextLine();
+            if (command.equals("register")) {
+                CreateAccount.CreateAccountCLI(db);
+            }
         }
     }
 }

@@ -1,6 +1,0 @@
-[username]
-[password]
-org.postgresql.Driver
-starbug.cs.rit.edu
-5432
-5432
