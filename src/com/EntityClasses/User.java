@@ -3,6 +3,7 @@ package com.EntityClasses;
 import java.sql.PreparedStatement;
 import java.sql.SQLException;
 import java.time.LocalDateTime;
+import java.util.HashMap;
 import java.util.Map;
 
 import com.DBInterface;
@@ -58,7 +59,7 @@ public class User implements EntityType<User>{
 
     @Override
     public boolean InsertEntity() {
-        PreparedStatement stmt = db.getStatement("INSERT INTO USER(Username, Password, creationDate, lastAccessDate) VALUES(?, ?, ?, ?)");
+        PreparedStatement stmt = db.getStatement("INSERT INTO \"User\"(Username, userPassword, creationDate, lastAccessDate) VALUES(?, ?, ?, ?)");
         try{
             stmt.setString(1, username);
             stmt.setString(2, password);
@@ -81,8 +82,18 @@ public class User implements EntityType<User>{
         return false;
     }
     public static void main(String[] args) {
-        User user = new User(new DBInterface());
+        Map<String, Object> userMap = new HashMap<>();
+        userMap.put("Username", "username");
+        userMap.put("Password", "password");
+        DBInterface db = new DBInterface();
+        User user = new User(db);
+        user.configEntity(userMap);
         user.InsertEntity();
+        try{
+            db.endSSH();
+        }catch(SQLException e){
+            System.out.println(e.getMessage());
+        }
     }
 
 }

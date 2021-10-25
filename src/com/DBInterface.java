@@ -21,12 +21,13 @@ import com.jcraft.jsch.Session;
 public class DBInterface{
     private static final String DBNAME = "p320_30";
     private Connection connection;
+    private Session session;
     
     public DBInterface(){
         try(
             BufferedReader br = new BufferedReader(
-                new FileReader("config.txt")
-            )    
+                new FileReader("src\\com\\config.txt")
+            )
         ){
             String user = br.readLine();
             String password = br.readLine();
@@ -40,7 +41,7 @@ public class DBInterface{
                 java.util.Properties config = new java.util.Properties();
                 config.put("StrictHostKeyChecking", "no");
                 JSch jsch = new JSch();
-                Session session = jsch.getSession(user, host, 22);
+                session = jsch.getSession(user, host, 22);
                 session.setPassword(password);
                 session.setConfig(config);
                 session.setConfig("PreferredAuthentications", "publickey,keyboard-interactive,password");
@@ -86,5 +87,16 @@ public class DBInterface{
     public void execStatementUpdate(PreparedStatement stmt) throws SQLException{
         stmt.executeUpdate();
         stmt.close();
+    }
+
+    public void endSSH() throws SQLException{
+        if (connection != null && !connection.isClosed()) {
+            System.out.println("Closing Database Connection");
+            connection.close();
+        }
+        if (session != null && session.isConnected()) {
+            System.out.println("Closing SSH Connection");
+            session.disconnect();
+        }
     }
 }
