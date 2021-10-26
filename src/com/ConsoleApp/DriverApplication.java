@@ -1,9 +1,11 @@
 package com.ConsoleApp;
+import java.sql.SQLException;
 import java.util.Scanner;
 
 import com.*;
 import com.ConsoleApp.CommandClasses.CreateAccount;
 import com.ConsoleApp.CommandClasses.CreateCategory;
+import com.ConsoleApp.CommandClasses.Login;
 
 public class DriverApplication {
 
@@ -18,49 +20,56 @@ public class DriverApplication {
     private static final Scanner scan = new Scanner(System.in);
 
 
-    public static void main (String[] args){
+    public static void main (String[] args) {
         boolean close = false;
         int select;
+        boolean logged = false;
         Scanner scan = new Scanner(System.in);
         System.out.println("Welcome to the Recipe App!");
 
-        //TODO: call Login here (i think?) then wrap the program loop in a conditional based on whether login worked or not.
+        logged = Login.WelcomeCLI(db);
 
-        while (!close) {
-            System.out.println("\t1. Add User");
-            System.out.println("\t2. Add Category");
-
-
-
+        if (logged) {
+            while (!close) {
+                System.out.println("\t1. Add User");
+                System.out.println("\t2. Add Category");
 
 
+                System.out.println("\t100. Exit");
+                try {
+                    System.out.print(">> ");
+                    select = scan.nextInt();
+                    switch (select) {
+                        case 1:
+                            System.out.println("creating new user...");
+                            CreateAccount.CreateAccountCLI(db);
+                            break;
+                        case 2:
+                            System.out.println("creating new category...");
+                            CreateCategory.CreateCategoryCLI(db);
+                            break;
 
-            System.out.println("\t100. Exit");
-            try {
-                System.out.print(">> ");
-                select = scan.nextInt();
-                switch (select) {
-                    case 1:
-                        System.out.println("creating new user...");
-                        CreateAccount.CreateAccountCLI(db);
-                        break;
-                    case 2:
-                        System.out.println("creating new category...");
-                        CreateCategory.CreateCategoryCLI(db);
-                        break;
-
-                    case 100:
-                        scan.close();
-                        db.endSSH();
-                        close = true;
-                        break;
-                    default:
-                        System.out.println(select + " is not an option.");
-                        break;
+                        case 100:
+                            scan.close();
+                            db.endSSH();
+                            close = true;
+                            break;
+                        default:
+                            System.out.println(select + " is not an option.");
+                            break;
+                    }
+                } catch (Exception e) {
+                    scan.nextLine();
+                    System.out.println("Enter the number of the list item.");
                 }
-            } catch (Exception e) {
-                scan.nextLine();
-                System.out.println("Enter the number of the list item.");
+            }
+        }
+        else{
+            try{
+                db.endSSH();
+            }
+            catch(SQLException e){
+                System.out.println(e.getMessage());
             }
         }
     }

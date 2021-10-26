@@ -7,6 +7,8 @@ import java.sql.*;
 import java.time.LocalDateTime;
 import java.util.Scanner;
 
+import static com.ConsoleApp.CommandClasses.CreateAccount.CreateAccountCLI;
+
 public class Login {
     private static final Scanner in = new Scanner(System.in);
 
@@ -21,22 +23,26 @@ public class Login {
                 System.out.println("1. Login");
                 System.out.println("2. Create Account");
                 System.out.println("3. Exit");
+                System.out.print(">> ");
                 selection = in.nextInt();
                 switch (selection) {
                     case 1:
-                        User user = LoginCli(db);
+                        User user = LoginCLI(db);
                         if (user != null) {
                             isLogged = true;
                             exit = true;
                         }
                         break;
                     case 2:
-                        CreateUserCli(db);
+                        CreateAccountCLI(db);
+                        isLogged = false;
                         break;
                     case 3:
+                        isLogged = false;
                         exit = true;
                         break;
                     default:
+                        isLogged = false;
                         System.out.println(selection + " is not a valid input.");
                 }
             }
@@ -49,7 +55,7 @@ public class Login {
         return isLogged;
     }
 
-    public static User LoginCli(DBInterface db){
+    public static User LoginCLI(DBInterface db){
         System.out.println("RecipeMate Login");
         in.nextLine();
         System.out.println("Enter your username:");
@@ -82,9 +88,6 @@ public class Login {
         return user;
     }
 
-    public static void CreateUserCli(DBInterface db){
-        //TODO: implement this
-    }
     public static void main(String[] args){
         DBInterface db = new DBInterface();
         WelcomeCLI(db);
