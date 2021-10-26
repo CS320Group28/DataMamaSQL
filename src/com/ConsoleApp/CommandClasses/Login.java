@@ -2,17 +2,17 @@ package com.ConsoleApp.CommandClasses;
 import com.EntityClasses.User;
 
 import com.DBInterface;
-import java.sql.PreparedStatement;
-import java.sql.ResultSet;
-import java.sql.SQLException;
+
+import java.sql.*;
 import java.time.LocalDateTime;
 import java.util.Scanner;
 
 public class Login {
     private static final Scanner in = new Scanner(System.in);
 
-    public static void WelcomeCLI(DBInterface db){
+    public static boolean WelcomeCLI(DBInterface db){
         boolean exit = false;
+        boolean isLogged = false;
 
         while(!exit){
             try {
@@ -25,12 +25,11 @@ public class Login {
                 switch (selection) {
                     case 1:
                         User user = LoginCli(db);
-                        if(user == null){
-                            break;
+                        if (user != null) {
+                            isLogged = true;
+                            exit = true;
                         }
-                        else{
-                            continue;
-                        }
+                        break;
                     case 2:
                         CreateUserCli(db);
                         break;
@@ -42,17 +41,19 @@ public class Login {
                 }
             }
             catch(Exception e){
+                System.out.println(e.getMessage());
                 System.out.println("Enter the number of the list item.");
                 in.nextLine();
             }
         }
+        return isLogged;
     }
 
     public static User LoginCli(DBInterface db){
         System.out.println("RecipeMate Login");
+        in.nextLine();
         System.out.println("Enter your username:");
         String username = in.nextLine();
-        in.nextLine();
         System.out.println("Enter your password:");
         String password = in.nextLine();
         User user = null;
@@ -63,16 +64,14 @@ public class Login {
             stmt.setString(1, username);
             stmt.setString(2, password);
             rs = stmt.executeQuery();
-            if(rs == null){
-                System.out.println("Login failed, invalid username or password.");
-                return null;
+            if(rs.next()) {
+                System.out.println("Login successful.");
+                user = new User((String) rs.getObject(1), (String) rs.getObject(3),
+                        ((Timestamp)rs.getObject(2)).toLocalDateTime(), ((Timestamp)rs.getObject(4)).toLocalDateTime());
             }
             else{
-                System.out.println("Login successful.");
-                if(rs.next()) {
-                    user = new User((String) rs.getObject(1), (String) rs.getObject(2),
-                            (LocalDateTime) rs.getObject(3), (LocalDateTime) rs.getObject(4));
-                }
+                System.out.println("Login failed, invalid username or password.");
+                return null;
             }
         }
         catch(SQLException e){
