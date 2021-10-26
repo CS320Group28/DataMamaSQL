@@ -23,6 +23,9 @@ public class DriverApplication {
         int select;
         Scanner scan = new Scanner(System.in);
         System.out.println("Welcome to the Recipe App!");
+
+        //TODO: call Login here (i think?) then wrap the program loop in a conditional based on whether login worked or not.
+
         while (!close) {
             System.out.println("\t1. Add User");
             System.out.println("\t2. Add Category");
