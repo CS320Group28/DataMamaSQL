@@ -14,8 +14,16 @@ public class User implements EntityType<User>{
     private LocalDateTime creationDate;
     private LocalDateTime lastAccessDate;
     private DBInterface db;
+
     public User(DBInterface db){
         this.db = db;
+    }
+
+    public User(String un, String pw, LocalDateTime cd, LocalDateTime ld){
+        this.username = un;
+        this.password = pw;
+        this.creationDate = cd;
+        this.lastAccessDate = ld;
     }
     @Override
     public void configEntity(Map<String, Object> attributes) {
