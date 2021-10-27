@@ -30,6 +30,7 @@ public class CreateCategory {
         PreparedStatement stmt = db.getStatement("SELECT * FROM \"Category\" where \"CategoryName\" = ?");
         ResultSet rs = null;
 
+        //test for pre existing category
         try{
             stmt.setString(1, categoryName);
             rs = stmt.executeQuery();
