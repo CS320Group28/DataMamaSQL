@@ -4,7 +4,6 @@ import com.EntityClasses.User;
 import com.DBInterface;
 
 import java.sql.*;
-import java.time.LocalDateTime;
 import java.util.Scanner;
 
 import static com.ConsoleApp.CommandClasses.CreateAccount.CreateAccountCLI;
@@ -66,7 +65,7 @@ public class Login {
         User user = null;
 
         ResultSet rs;
-        PreparedStatement stmt = db.getStatement("SELECT * FROM \"User\" where Username = ? AND UserPassword = ?");
+        PreparedStatement stmt = db.getPreparedStatement("SELECT * FROM \"User\" where Username = ? AND UserPassword = ?");
         try {
             stmt.setString(1, username);
             stmt.setString(2, password);

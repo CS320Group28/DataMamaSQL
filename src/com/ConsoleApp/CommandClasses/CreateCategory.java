@@ -9,7 +9,6 @@ import java.util.Scanner;
 
 import com.DBInterface;
 import com.EntityClasses.Category;
-import com.EntityClasses.User;
 
 
 public class CreateCategory {
@@ -27,7 +26,7 @@ public class CreateCategory {
         ct.configEntity(ctMap);
 
 
-        PreparedStatement stmt = db.getStatement("SELECT * FROM \"Category\" where \"CategoryName\" = ?");
+        PreparedStatement stmt = db.getPreparedStatement("SELECT * FROM \"Category\" where \"CategoryName\" = ?");
         ResultSet rs = null;
 
         try{

@@ -4,7 +4,6 @@ import java.sql.PreparedStatement;
 import java.sql.SQLException;
 import java.time.LocalDateTime;
 import java.util.Map;
-import java.util.Objects;
 
 import com.DBInterface;
 
@@ -174,7 +173,7 @@ public class Recipe implements EntityType<Recipe>{
     //used for creating the recipe / inserting into the database
     @Override
     public boolean InsertEntity() {
-        PreparedStatement stmt = db.getStatement(
+        PreparedStatement stmt = db.getPreparedStatement(
                 "Insert into \"Recipe\"(\"RecipeName\", \"Steps\", \"Description\", \"Servings\" " +
                         ", \"CookTime\", \"Difficulty\", \"CreationDate\") values(?, ?, ?, ?, ?, ?, ?)"
         );

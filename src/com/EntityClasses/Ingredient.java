@@ -31,6 +31,6 @@ public class Ingredient implements EntityType<Ingredient>{
 
     @Override
     public void configEntity(Map<String, Object> attributes) {
-        this.IngredientName = (String) attributes.get("IngredientName");
+        this.IngredientName = (String) attributes.get("ingredientname");
     }
 }

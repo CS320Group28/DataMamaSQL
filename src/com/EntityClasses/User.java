@@ -67,13 +67,13 @@ public class User implements EntityType<User>{
 
     @Override
     public boolean InsertEntity() {
-        PreparedStatement stmt = db.getStatement("INSERT INTO \"User\"(Username, userPassword, creationDate, lastAccessDate) VALUES(?, ?, ?, ?)");
+        PreparedStatement stmt = db.getPreparedStatement("INSERT INTO \"User\"(Username, userPassword, creationDate, lastAccessDate) VALUES(?, ?, ?, ?)");
         try{
             stmt.setString(1, username);
             stmt.setString(2, password);
             stmt.setObject(3, creationDate);
             stmt.setObject(4, lastAccessDate);
-            db.execStatementQuery(stmt);
+            db.execStatementUpdate(stmt);
         } catch(SQLException e){
             return false;
         }
