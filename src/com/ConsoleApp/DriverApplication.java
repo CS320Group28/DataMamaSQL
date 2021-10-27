@@ -3,6 +3,8 @@ import java.sql.SQLException;
 import java.util.Scanner;
 
 import com.*;
+import com.ConsoleApp.CommandClasses.CreateRecipe;
+import com.EntityClasses.User;
 import com.ConsoleApp.CommandClasses.CreateAccount;
 import com.ConsoleApp.CommandClasses.CreateCategory;
 import com.ConsoleApp.CommandClasses.Login;
@@ -27,13 +29,16 @@ public class DriverApplication {
         Scanner scan = new Scanner(System.in);
         System.out.println("Welcome to the Recipe App!");
 
-        logged = Login.WelcomeCLI(db);
+        User user = null;
+        user = Login.WelcomeCLI(db);
+        if(user != null){
+            logged = true;
+        }
 
         if (logged) {
             while (!close) {
-                System.out.println("\t1. Add User");
-                System.out.println("\t2. Add Category");
-
+                System.out.println("\t1. Add Category");
+                System.out.println("\t2. Author Recipe");
 
                 System.out.println("\t100. Exit");
                 try {
@@ -41,14 +46,13 @@ public class DriverApplication {
                     select = scan.nextInt();
                     switch (select) {
                         case 1:
-                            System.out.println("creating new user...");
-                            CreateAccount.CreateAccountCLI(db);
-                            break;
-                        case 2:
                             System.out.println("creating new category...");
                             CreateCategory.CreateCategoryCLI(db);
                             break;
-
+                        case 2:
+                            System.out.println("creating a new recipe...");
+                            CreateRecipe.CreateRecipeCLI(db);
+                            break;
                         case 100:
                             scan.close();
                             db.endSSH();

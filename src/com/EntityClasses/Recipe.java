@@ -1,5 +1,7 @@
 package com.EntityClasses;
 
+import java.sql.PreparedStatement;
+import java.sql.SQLException;
 import java.time.LocalDateTime;
 import java.util.Map;
 import java.util.Objects;
@@ -21,7 +23,7 @@ public class Recipe implements EntityType<Recipe>{
     private String steps;
     private int rating;
     private String description;
-    private float servings;
+    private int servings;
     private int cookTime;
     private Difficulty difficulty;
     private LocalDateTime creationDate;
@@ -85,13 +87,12 @@ public class Recipe implements EntityType<Recipe>{
         if(difficulty < 0 || difficulty > 4)
             throw new IndexOutOfBoundsException();
         this.difficulty = Difficulty.values()[difficulty];
-        this.recipeID = (int) attributes.get("recipeID");
-        this.recipeName = (String) attributes.get("recipeName");
-        this.cookTime = (int) attributes.get("cookTime");
+        this.recipeName = (String) attributes.get("recipename");
+        this.cookTime = (int) attributes.get("cooktime");
         this.steps = (String) attributes.get("steps");
-        this.rating = (int) attributes.get("rating");
+        this.servings = (int) attributes.get("servings");
         this.description = (String) attributes.get("description");
-        this.creationDate = (LocalDateTime) attributes.get("creationDate");
+        this.creationDate = LocalDateTime.now();
     }
     //endregion
 
@@ -141,7 +142,7 @@ public class Recipe implements EntityType<Recipe>{
         return servings;
     }
 
-    public void setServings(float servings) {
+    public void setServings(int servings) {
         this.servings = servings;
     }
 
@@ -173,7 +174,26 @@ public class Recipe implements EntityType<Recipe>{
     //used for creating the recipe / inserting into the database
     @Override
     public boolean InsertEntity() {
-        //this is where the new recipe will be added to the database
+        PreparedStatement stmt = db.getStatement(
+                "Insert into \"Recipe\"(\"RecipeName\", \"Steps\", \"Description\", \"Servings\" " +
+                        ", \"CookTime\", \"Difficulty\", \"CreationDate\") values(?, ?, ?, ?, ?, ?, ?)"
+        );
+        try {
+            stmt.setString(1, this.recipeName);
+            stmt.setString(2, this.steps);
+            stmt.setString(3, this.description);
+            stmt.setInt(4, this.servings);
+            stmt.setInt(5, this.cookTime);
+            stmt.setInt(6, this.difficulty.ordinal());
+            stmt.setObject(7, this.creationDate);
+
+            db.execStatementUpdate(stmt);
+
+        } catch (SQLException e) {
+            System.out.println(e.getMessage());
+        }
+
+
         return false;
     }
 

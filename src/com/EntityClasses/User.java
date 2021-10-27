@@ -104,4 +104,14 @@ public class User implements EntityType<User>{
         }
     }
 
+    @Override
+    public String toString() {
+        return "User{" +
+                "username='" + username + '\'' +
+                ", password='" + password + '\'' +
+                ", creationDate=" + creationDate +
+                ", lastAccessDate=" + lastAccessDate +
+                ", db=" + db +
+                '}';
+    }
 }

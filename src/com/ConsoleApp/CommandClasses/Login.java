@@ -12,9 +12,10 @@ import static com.ConsoleApp.CommandClasses.CreateAccount.CreateAccountCLI;
 public class Login {
     private static final Scanner in = new Scanner(System.in);
 
-    public static boolean WelcomeCLI(DBInterface db){
+    public static User WelcomeCLI(DBInterface db){
         boolean exit = false;
         boolean isLogged = false;
+        User user = null;
 
         while(!exit){
             try {
@@ -27,7 +28,7 @@ public class Login {
                 selection = in.nextInt();
                 switch (selection) {
                     case 1:
-                        User user = LoginCLI(db);
+                        user = LoginCLI(db);
                         if (user != null) {
                             isLogged = true;
                             exit = true;
@@ -52,7 +53,7 @@ public class Login {
                 in.nextLine();
             }
         }
-        return isLogged;
+        return user;
     }
 
     public static User LoginCLI(DBInterface db){
