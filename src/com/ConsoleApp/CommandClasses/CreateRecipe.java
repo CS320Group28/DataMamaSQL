@@ -89,9 +89,10 @@ public class CreateRecipe {
 
 
         System.out.println("Enter list of ingredients and the required quantity below.");
-        String ingredients = "";
+        //String ingredients = "";
 
         String ingredient = "";
+        Ingredient ing = new Ingredient(db);
         // Prompt for ingredients one at time
         while(true){
             System.out.print("<Name> <Quantity>: ");
@@ -103,8 +104,26 @@ public class CreateRecipe {
             // [name, amount]
             String[] tokens = ingredient.split("\\s+");
             tokens[0] = tokens[0].toLowerCase();
+            Map<String, Object> ingMap = new HashMap<>();
+            ingMap.put("ingredientname", tokens[0]);
+            ing.configEntity(ingMap);
             // check if ingredient already exists, if not, create it
             try {
+                System.out.println();
+                PreparedStatement stmt = db.getPreparedStatement("select * from \"Ingredient\" where \"ingredientname\" = ?");
+                stmt.setString(1,tokens[0]);
+                ResultSet rs = stmt.executeQuery();
+
+                PreparedStatement insStmt = db.getPreparedStatement("insert into \"Requires\" values( ?, ?, ?);");
+                if(rs.next()){
+                    // set up requires relation if ingredient is already in table
+                    insStmt.setInt(1, id);
+                    insStmt.setString(2, ing.getIngredientName());
+                    insStmt.setInt(3, Integer.parseInt(tokens[1]));
+                    db.execStatementUpdate(insStmt);
+                    continue;
+                }
+                /*
                 PreparedStatement statement = db.getPreparedStatement("select count(1) from \"Ingredient\" where \"ingredientname\" = ? ");
                 statement.setString(1, tokens[0]);
                 ResultSet results = db.execStatementQuery(statement);
@@ -119,9 +138,23 @@ public class CreateRecipe {
                     newIngredient.InsertEntity();
                     statement.close();
                 }
-            } catch (SQLException e) {
+
+                 */
+
+
+
+            }
+            catch (SQLException e) {
                 e.printStackTrace();
             }
+
+            ing.InsertEntity();
+
+            // set up requires relation if ingredient was not already in table
+
+
+
+            /*
             Requires req = new Requires(db);
             Map<String, Object> reqMap = new HashMap<>();
             reqMap.put("recipeid", id);
@@ -129,6 +162,8 @@ public class CreateRecipe {
             reqMap.put("quantity", Integer.parseInt(tokens[1]));
             req.configEntity(reqMap);
             req.InsertEntity();
+            */
+
         }
     }
 }

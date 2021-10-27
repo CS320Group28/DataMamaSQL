@@ -20,7 +20,6 @@ public class CreateCategory {
         Category ct = new Category(db);
         System.out.println("Enter a Category");
         String categoryName = in.next();
-
         Map<String, Object> ctMap = new HashMap<>();
         ctMap.put("categoryName", categoryName);
         ct.configEntity(ctMap);
