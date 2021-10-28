@@ -109,7 +109,6 @@ public class CreateRecipe {
             ing.configEntity(ingMap);
             // check if ingredient already exists, if not, create it
             try {
-                System.out.println();
                 PreparedStatement stmt = db.getPreparedStatement("select * from \"Ingredient\" where \"ingredientname\" = ?");
                 stmt.setString(1,tokens[0]);
                 ResultSet rs = stmt.executeQuery();
@@ -117,6 +116,15 @@ public class CreateRecipe {
                 PreparedStatement insStmt = db.getPreparedStatement("insert into \"Requires\" values( ?, ?, ?);");
                 if(rs.next()){
                     // set up requires relation if ingredient is already in table
+                    insStmt.setInt(1, id);
+                    insStmt.setString(2, ing.getIngredientName());
+                    insStmt.setInt(3, Integer.parseInt(tokens[1]));
+                    db.execStatementUpdate(insStmt);
+                    continue;
+                }
+                else{
+                    ing.InsertEntity();
+                    insStmt = db.getPreparedStatement("insert into \"Requires\" values( ?, ?, ?);");
                     insStmt.setInt(1, id);
                     insStmt.setString(2, ing.getIngredientName());
                     insStmt.setInt(3, Integer.parseInt(tokens[1]));
@@ -148,9 +156,14 @@ public class CreateRecipe {
                 e.printStackTrace();
             }
 
-            ing.InsertEntity();
+
 
             // set up requires relation if ingredient was not already in table
+
+
+
+
+
 
 
 
