@@ -83,7 +83,7 @@ public class Recipe implements EntityType<Recipe>{
     @Override
     public void configEntity(Map<String, Object> attributes) {
         int difficulty = (int) attributes.get("difficulty");
-        if(difficulty < 0 || difficulty > 4)
+        if(difficulty < 1 || difficulty > 5)
             throw new IndexOutOfBoundsException();
         this.difficulty = Difficulty.values()[difficulty];
         this.recipeName = (String) attributes.get("recipename");
