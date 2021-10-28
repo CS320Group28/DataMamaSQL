@@ -42,7 +42,7 @@ public class Requires implements EntityType<Requires>{
     }
 
     @Override
-    public boolean UpdateEntity(Requires oldEntity) {
-        return EntityType.super.UpdateEntity(oldEntity);
+    public boolean UpdateEntity() {
+        return EntityType.super.UpdateEntity();
     }
 }

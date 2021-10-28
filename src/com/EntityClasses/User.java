@@ -85,9 +85,26 @@ public class User implements EntityType<User>{
         return false;
     }
 
-    @Override
-    public boolean UpdateEntity(User oldUser) {
-        return false;
+    public boolean UpdateEntity() {
+        PreparedStatement stmt = db.getPreparedStatement("UPDATE \"User\" SET \"username\" = ?, " +
+                                                        "\"lastaccessdate\" = ?, \"userpassword\" = ?, \"creationdate\" = ?" +
+                                                        "WHERE \"username\" = ?");
+        try{
+            stmt.setString(1, this.username);
+            stmt.setObject(2, this.lastAccessDate);
+            stmt.setString(3, this.password);
+            stmt.setObject(4, this.creationDate);
+            stmt.setString(5, this.username);
+            stmt.executeUpdate();
+            stmt.close();
+        }catch (SQLException e){
+            System.err.println("Failed to update user data");
+            return false;
+        }
+        return true;
+
+
+
     }
     public static void main(String[] args) {
         Map<String, Object> userMap = new HashMap<>();

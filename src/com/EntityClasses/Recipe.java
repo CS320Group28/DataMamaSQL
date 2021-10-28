@@ -202,7 +202,7 @@ public class Recipe implements EntityType<Recipe>{
     }
 
     @Override
-    public boolean UpdateEntity(Recipe oldRecipe) {
+    public boolean UpdateEntity() {
         return false;
     }
 

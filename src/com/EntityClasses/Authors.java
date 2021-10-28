@@ -39,7 +39,7 @@ public class Authors implements EntityType{
     }
 
     @Override
-    public boolean UpdateEntity(Object oldEntity) {
-        return EntityType.super.UpdateEntity(oldEntity);
+    public boolean UpdateEntity() {
+        return EntityType.super.UpdateEntity();
     }
 }

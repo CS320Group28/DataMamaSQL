@@ -4,6 +4,7 @@ import com.EntityClasses.User;
 import com.DBInterface;
 
 import java.sql.*;
+import java.time.LocalDateTime;
 import java.util.Scanner;
 
 import static com.ConsoleApp.CommandClasses.CreateAccount.CreateAccountCLI;
@@ -12,6 +13,7 @@ public class Login {
     private static final Scanner in = new Scanner(System.in);
 
     public static User WelcomeCLI(DBInterface db){
+
         boolean exit = false;
         boolean isLogged = false;
         User user = null;
@@ -29,8 +31,13 @@ public class Login {
                     case 1:
                         user = LoginCLI(db);
                         if (user != null) {
-                            isLogged = true;
-                            exit = true;
+                            if(updateLastLogin(db, user)) {
+                                isLogged = true;
+                                exit = true;
+                            }else{
+                                System.err.println("Failed to update user last login time.");
+                                continue;
+                            }
                         }
                         break;
                     case 2:
@@ -86,6 +93,15 @@ public class Login {
             in.nextLine();
         }
         return user;
+    }
+
+    private static boolean updateLastLogin(DBInterface db, User user){
+        User temp = new User(db);
+        temp.setUserName(user.getUserName());
+        temp.setPassword(user.getPassword());
+        temp.setCreationDate(user.getCreationDate());
+        temp.setLastAccessDate(LocalDateTime.now());
+        return temp.UpdateEntity();
     }
 
     public static void main(String[] args){

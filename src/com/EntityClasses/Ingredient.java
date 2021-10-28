@@ -50,7 +50,7 @@ public class Ingredient implements EntityType<Ingredient>{
     }
 
     @Override
-    public boolean UpdateEntity(Ingredient oldEntity) {
+    public boolean UpdateEntity() {
         return false;
     }
 

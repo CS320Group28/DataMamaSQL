@@ -62,7 +62,7 @@ public class Category implements EntityType<Category>{
     }
 
     @Override
-    public boolean UpdateEntity(Category oldCategory) {
+    public boolean UpdateEntity() {
         return false;
     }
 }
