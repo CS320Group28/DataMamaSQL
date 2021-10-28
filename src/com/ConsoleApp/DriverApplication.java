@@ -65,6 +65,7 @@ public class DriverApplication {
                                     break;
                                 case 2:
                                     System.out.println("sorting by rating...");
+                                    SortRecipes.SortByRatingCLI(db);
                                     break;
                                 case 3:
                                     System.out.println("sorting by most recent");

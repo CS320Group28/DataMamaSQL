@@ -49,10 +49,58 @@ public class SortRecipes {
                 }
                 catch(SQLException e){
                     System.out.println(e.getMessage());
+                    e.printStackTrace();
                     break;
                 }
         }
     }
+
+    public static void SortByRatingCLI(DBInterface db){
+        System.out.println("Sort by...");
+        System.out.println("\t1. Ascending");
+        System.out.println("\t2. Descending");
+        System.out.print(">> ");
+        ad = scan.nextInt();
+
+        switch(ad){
+            case 1:
+                try{
+                    System.out.println("sorting by ascending rating...");
+                    PreparedStatement stmt = db.getPreparedStatement("select \"RecipeName\", \"Rating\", \"CreationDate\" from \"Recipe\"" +
+                            "order by \"Rating\" asc;");
+                    ResultSet rs = null;
+                    rs=db.execStatementQuery(stmt);
+                    formatRS(rs);
+                    stmt.close();
+                    break;
+
+                }
+                catch(SQLException e){
+                    System.out.println(e.getMessage());
+                    e.printStackTrace();
+                    break;
+                }
+            case 2:
+                try{
+                    System.out.println("sorting by descending rating...");
+                    PreparedStatement stmt = db.getPreparedStatement("select \"RecipeName\", \"Rating\", \"CreationDate\" from \"Recipe\"" +
+                            "order by \"Rating\" desc;");
+                    ResultSet rs = null;
+                    rs=db.execStatementQuery(stmt);
+                    formatRS(rs);
+                    stmt.close();
+                    break;
+
+                }
+                catch(SQLException e){
+                    System.out.println(e.getMessage());
+                    e.printStackTrace();
+                    break;
+                }
+        }
+
+    }
+
 
     private static void formatRS(ResultSet rs) throws SQLException{
         if(rs == null){
