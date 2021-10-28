@@ -69,6 +69,7 @@ public class DriverApplication {
                                     break;
                                 case 3:
                                     System.out.println("sorting by most recent");
+                                    SortRecipes.SortByRecentCLI(db);
                                     break;
                             }
                             break;

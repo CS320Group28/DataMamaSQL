@@ -16,14 +16,14 @@ public class SortRecipes {
 
     public static void SortByNameCLI(DBInterface db){
         System.out.println("Sort by...");
-        System.out.println("\t1. Ascending");
-        System.out.println("\t2. Descending");
+        System.out.println("\t1. Alphabetical");
+        System.out.println("\t2. Reverse Alphabetical");
         System.out.print(">> ");
         ad = scan.nextInt();
         switch(ad){
             case 1:
                 try {
-                    System.out.println("sorting by ascending name...");
+                    System.out.println("sorting by name alphabetically...");
                     PreparedStatement stmt = db.getPreparedStatement("select \"RecipeName\", \"Rating\", \"CreationDate\" from \"Recipe\"" +
                             "order by \"RecipeName\" asc;");
                     ResultSet rs = null;
@@ -38,7 +38,7 @@ public class SortRecipes {
                 }
             case 2:
                 try {
-                    System.out.println("sorting by descending name...");
+                    System.out.println("sorting by name reverse alphabetically...");
                     PreparedStatement stmt = db.getPreparedStatement("select \"RecipeName\", \"Rating\", \"CreationDate\" from \"Recipe\"" +
                             "order by \"RecipeName\" desc;");
                     ResultSet rs = null;
@@ -57,17 +57,61 @@ public class SortRecipes {
 
     public static void SortByRatingCLI(DBInterface db){
         System.out.println("Sort by...");
-        System.out.println("\t1. Ascending");
-        System.out.println("\t2. Descending");
+        System.out.println("\t1. Lowest Rated");
+        System.out.println("\t2. Highest Rated");
         System.out.print(">> ");
         ad = scan.nextInt();
 
         switch(ad){
             case 1:
                 try{
-                    System.out.println("sorting by ascending rating...");
+                    System.out.println("sorting by lowest rated...");
                     PreparedStatement stmt = db.getPreparedStatement("select \"RecipeName\", \"Rating\", \"CreationDate\" from \"Recipe\"" +
                             "order by \"Rating\" asc;");
+                    ResultSet rs = null;
+                    rs=db.execStatementQuery(stmt);
+                    formatRS(rs);
+                    stmt.close();
+                    break;
+                }
+                catch(SQLException e){
+                    System.out.println(e.getMessage());
+                    e.printStackTrace();
+                    break;
+                }
+            case 2:
+                try{
+                    System.out.println("sorting by highest rated...");
+                    PreparedStatement stmt = db.getPreparedStatement("select \"RecipeName\", \"Rating\", \"CreationDate\" from \"Recipe\"" +
+                            "order by \"Rating\" desc;");
+                    ResultSet rs = null;
+                    rs=db.execStatementQuery(stmt);
+                    formatRS(rs);
+                    stmt.close();
+                    break;
+                }
+                catch(SQLException e){
+                    System.out.println(e.getMessage());
+                    e.printStackTrace();
+                    break;
+                }
+        }
+
+    }
+
+    public static void SortByRecentCLI(DBInterface db){
+        System.out.println("Sort by...");
+        System.out.println("\t1. Oldest");
+        System.out.println("\t2. Newest");
+        System.out.print(">> ");
+        ad = scan.nextInt();
+
+        switch(ad){
+            case 1:
+                try{
+                    System.out.println("sorting by oldest...");
+                    PreparedStatement stmt = db.getPreparedStatement("select \"RecipeName\", \"Rating\", \"CreationDate\" from \"Recipe\"" +
+                            "order by \"CreationDate\" asc;");
                     ResultSet rs = null;
                     rs=db.execStatementQuery(stmt);
                     formatRS(rs);
@@ -82,9 +126,9 @@ public class SortRecipes {
                 }
             case 2:
                 try{
-                    System.out.println("sorting by descending rating...");
+                    System.out.println("sorting by newest...");
                     PreparedStatement stmt = db.getPreparedStatement("select \"RecipeName\", \"Rating\", \"CreationDate\" from \"Recipe\"" +
-                            "order by \"Rating\" desc;");
+                            "order by \"CreationDate\" desc;");
                     ResultSet rs = null;
                     rs=db.execStatementQuery(stmt);
                     formatRS(rs);
@@ -102,6 +146,12 @@ public class SortRecipes {
     }
 
 
+
+    /***
+     * a simple helper function that prints the ResultSet obtained by sorting the recipes in the proper format.
+     * @param rs
+     * @throws SQLException
+     */
     private static void formatRS(ResultSet rs) throws SQLException{
         if(rs == null){
             System.err.println("error retrieving results");
