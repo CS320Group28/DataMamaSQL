@@ -3,11 +3,8 @@ import java.sql.SQLException;
 import java.util.Scanner;
 
 import com.*;
-import com.ConsoleApp.CommandClasses.CreateRecipe;
+import com.ConsoleApp.CommandClasses.*;
 import com.EntityClasses.User;
-import com.ConsoleApp.CommandClasses.CreateAccount;
-import com.ConsoleApp.CommandClasses.CreateCategory;
-import com.ConsoleApp.CommandClasses.Login;
 
 public class DriverApplication {
 
@@ -25,6 +22,7 @@ public class DriverApplication {
     public static void main (String[] args) {
         boolean close = false;
         int select;
+        int rSort;
         boolean logged = false;
         Scanner scan = new Scanner(System.in);
         System.out.println("Welcome to the Recipe App!");
@@ -39,7 +37,7 @@ public class DriverApplication {
             while (!close) {
                 System.out.println("\t1. Add Category");
                 System.out.println("\t2. Author Recipe");
-
+                System.out.println("\t3. Sort Recipes");
                 System.out.println("\t100. Exit");
                 try {
                     System.out.print(">> ");
@@ -52,6 +50,26 @@ public class DriverApplication {
                         case 2:
                             System.out.println("creating a new recipe...");
                             CreateRecipe.CreateRecipeCLI(db, user);
+                            break;
+                        case 3:
+                            System.out.println("How would you like to sort the recipes?");
+                            System.out.println("\t1. Sort by name");
+                            System.out.println("\t2. Sort by rating");
+                            System.out.println("\t3. Sort by most recent");
+                            System.out.print(">> ");
+                            rSort = scan.nextInt();
+                            switch(rSort){
+                                case 1:
+                                    System.out.println("sorting by name...");
+                                    SortRecipes.SortByNameCLI(db);
+                                    break;
+                                case 2:
+                                    System.out.println("sorting by rating...");
+                                    break;
+                                case 3:
+                                    System.out.println("sorting by most recent");
+                                    break;
+                            }
                             break;
                         case 100:
                             scan.close();
