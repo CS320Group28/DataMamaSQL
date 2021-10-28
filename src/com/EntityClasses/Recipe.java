@@ -85,7 +85,7 @@ public class Recipe implements EntityType<Recipe>{
         int difficulty = (int) attributes.get("difficulty");
         if(difficulty < 1 || difficulty > 5)
             throw new IndexOutOfBoundsException();
-        this.difficulty = Difficulty.values()[difficulty];
+        this.difficulty = Difficulty.values()[difficulty-1];
         this.recipeName = (String) attributes.get("recipename");
         this.cookTime = (int) attributes.get("cooktime");
         this.steps = (String) attributes.get("steps");
