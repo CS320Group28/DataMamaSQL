@@ -6,6 +6,7 @@ import java.util.Map;
 import com.DBInterface;
 
 /**
+ /**
  * This interface will be implemented by all Entity Type classes.
  */
 public interface EntityType<T> {
@@ -35,8 +36,7 @@ public interface EntityType<T> {
      * @param oldEntity,newEntity
      * @return
      */
-    default public boolean UpdateEntity(T oldEntity){
+    default public boolean UpdateEntity(){
         throw new UnsupportedOperationException();
     }
-
 }

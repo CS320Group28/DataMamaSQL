@@ -43,10 +43,10 @@ public class Category implements EntityType<Category>{
 
     @Override
     public boolean InsertEntity() {
-        PreparedStatement stmt = db.getStatement("INSERT INTO \"Category\"(\"CategoryName\") VALUES(?)");
+        PreparedStatement stmt = db.getPreparedStatement("INSERT INTO \"Category\"(\"CategoryName\") VALUES(?)");
         try{
             stmt.setString(1, categoryName);
-            db.execStatementQuery(stmt);
+            db.execStatementUpdate(stmt);
         } catch(SQLException e){
             e.getMessage();
             return false;
@@ -62,7 +62,7 @@ public class Category implements EntityType<Category>{
     }
 
     @Override
-    public boolean UpdateEntity(Category oldCategory) {
+    public boolean UpdateEntity() {
         return false;
     }
 }

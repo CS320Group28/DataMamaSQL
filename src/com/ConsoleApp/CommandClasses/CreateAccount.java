@@ -29,7 +29,7 @@ public class CreateAccount {
             userMap.put("Password", password);
             user.configEntity(userMap);
 
-            PreparedStatement stmt = db.getStatement("Select * From \"User\" where \"username\" = ?");
+            PreparedStatement stmt = db.getPreparedStatement("Select * From \"User\" where \"username\" = ?");
             ResultSet rs = null;
             try {
                 stmt.setString(1, username);

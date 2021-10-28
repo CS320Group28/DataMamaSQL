@@ -9,25 +9,27 @@ import java.util.Scanner;
 
 import com.DBInterface;
 import com.EntityClasses.Category;
-import com.EntityClasses.User;
 
 
 public class CreateCategory {
 
     private static final Scanner in = new Scanner(System.in);
 
+    /**
+     * Handles all logic and user input for creating a Category and setting up relevant relations
+     * @param db database interface to use with a connection.
+     */
     public static void CreateCategoryCLI(DBInterface db){
 
         Category ct = new Category(db);
         System.out.println("Enter a Category");
         String categoryName = in.next();
-
         Map<String, Object> ctMap = new HashMap<>();
         ctMap.put("categoryName", categoryName);
         ct.configEntity(ctMap);
 
 
-        PreparedStatement stmt = db.getStatement("SELECT * FROM \"Category\" where \"CategoryName\" = ?");
+        PreparedStatement stmt = db.getPreparedStatement("SELECT * FROM \"Category\" where \"CategoryName\" = ?");
         ResultSet rs = null;
 
         //test for pre existing category

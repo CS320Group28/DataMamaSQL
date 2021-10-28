@@ -4,7 +4,6 @@ import java.sql.PreparedStatement;
 import java.sql.SQLException;
 import java.time.LocalDateTime;
 import java.util.Map;
-import java.util.Objects;
 
 import com.DBInterface;
 
@@ -84,9 +83,9 @@ public class Recipe implements EntityType<Recipe>{
     @Override
     public void configEntity(Map<String, Object> attributes) {
         int difficulty = (int) attributes.get("difficulty");
-        if(difficulty < 0 || difficulty > 4)
+        if(difficulty < 1 || difficulty > 5)
             throw new IndexOutOfBoundsException();
-        this.difficulty = Difficulty.values()[difficulty];
+        this.difficulty = Difficulty.values()[difficulty-1];
         this.recipeName = (String) attributes.get("recipename");
         this.cookTime = (int) attributes.get("cooktime");
         this.steps = (String) attributes.get("steps");
@@ -174,7 +173,7 @@ public class Recipe implements EntityType<Recipe>{
     //used for creating the recipe / inserting into the database
     @Override
     public boolean InsertEntity() {
-        PreparedStatement stmt = db.getStatement(
+        PreparedStatement stmt = db.getPreparedStatement(
                 "Insert into \"Recipe\"(\"RecipeName\", \"Steps\", \"Description\", \"Servings\" " +
                         ", \"CookTime\", \"Difficulty\", \"CreationDate\") values(?, ?, ?, ?, ?, ?, ?)"
         );
@@ -203,7 +202,7 @@ public class Recipe implements EntityType<Recipe>{
     }
 
     @Override
-    public boolean UpdateEntity(Recipe oldRecipe) {
+    public boolean UpdateEntity() {
         return false;
     }
 

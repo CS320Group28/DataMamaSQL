@@ -10,6 +10,8 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Objects;
 
 import com.jcraft.jsch.JSch;
@@ -69,19 +71,24 @@ public class DBInterface{
         }
         Objects.requireNonNull(this.connection, "Connection not successfully retrieved");
     }
-    public PreparedStatement getStatement(String statementFormat){
+    public PreparedStatement getPreparedStatement(String statementFormat){
         try{
             return connection.prepareStatement(statementFormat);
         }catch(SQLException e){
             return null;
         }
-        
+    }
+
+    public Statement getStatement(){
+        try {
+            return connection.createStatement();
+        } catch (SQLException e) {
+            return null;
+        }
     }
 
     public ResultSet execStatementQuery(PreparedStatement stmt) throws SQLException{
-        ResultSet rset = stmt.executeQuery();
-        stmt.close();
-        return rset;
+        return stmt.executeQuery();
     }
     
     public void execStatementUpdate(PreparedStatement stmt) throws SQLException{
