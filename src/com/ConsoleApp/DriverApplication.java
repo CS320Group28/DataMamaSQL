@@ -51,7 +51,7 @@ public class DriverApplication {
                             break;
                         case 2:
                             System.out.println("creating a new recipe...");
-                            CreateRecipe.CreateRecipeCLI(db);
+                            CreateRecipe.CreateRecipeCLI(db, user);
                             break;
                         case 100:
                             scan.close();
@@ -63,8 +63,8 @@ public class DriverApplication {
                             break;
                     }
                 } catch (Exception e) {
-                    System.out.println(e.getMessage());
-                    scan.nextLine();
+                    e.printStackTrace();
+                    //scan.nextLine();
                     System.out.println("Enter the number of the list item.");
                 }
             }

@@ -1,9 +1,7 @@
 package com.ConsoleApp.CommandClasses;
 
 import com.DBInterface;
-import com.EntityClasses.Ingredient;
-import com.EntityClasses.Recipe;
-import com.EntityClasses.Requires;
+import com.EntityClasses.*;
 
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
@@ -15,7 +13,7 @@ public class CreateRecipe {
 
     private static Scanner scan = new Scanner(System.in);
 
-    public static Recipe CreateRecipeCLI(DBInterface db){
+    public static Recipe CreateRecipeCLI(DBInterface db, User user){
 
         System.out.print("Enter recipe name: ");
         String recipeName = scan.nextLine();
@@ -64,7 +62,7 @@ public class CreateRecipe {
         recipe.configEntity(recipeMap);
         recipe.InsertEntity();
 
-        int id = -1;
+        int rid = -1;
         try {
             PreparedStatement stmt = db.getPreparedStatement("select \"RecipeID\" from \"Recipe\" where \"RecipeName\" = ?"
                                                         + " and \"CreationDate\" = ?");
@@ -73,19 +71,24 @@ public class CreateRecipe {
             ResultSet rs = db.execStatementQuery(stmt);
 
             if(rs.next()) {
-                id = rs.getInt(1);
+                rid = rs.getInt(1);
                 stmt.close();
             }
         } catch (SQLException e) {
             e.printStackTrace();
         }
-        setupIngredients(db, id);
-        if(id < 0){
+        if(rid < 0){
+            System.err.println("rId was not able to be retrieved, try again.");
             return null; //broken as hell PDM wins
         }
+
+        setupIngredients(db, rid);
+        relateToAuthor(db, rid, user);
+        //scan.close();
+
         return recipe;
     }
-    private static void setupIngredients(DBInterface db, int id){
+    private static void setupIngredients(DBInterface db, int rid){
 
 
         System.out.println("Enter list of ingredients and the required quantity below.");
@@ -95,14 +98,13 @@ public class CreateRecipe {
         Ingredient ing = new Ingredient(db);
         // Prompt for ingredients one at time
         while(true){
-            System.out.print("<Name> <Quantity>: ");
+            System.out.print("<Name>, <Quantity> (type \"quit\" to quit): ");
             ingredient = scan.nextLine();
             if(ingredient.equals("quit")){
-                scan.close();
                 break;
             }
             // [name, amount]
-            String[] tokens = ingredient.split("\\s+");
+            String[] tokens = ingredient.split("\\s*,\\s*");
             tokens[0] = tokens[0].toLowerCase();
             Map<String, Object> ingMap = new HashMap<>();
             ingMap.put("ingredientname", tokens[0]);
@@ -112,71 +114,38 @@ public class CreateRecipe {
                 PreparedStatement stmt = db.getPreparedStatement("select * from \"Ingredient\" where \"ingredientname\" = ?");
                 stmt.setString(1,tokens[0]);
                 ResultSet rs = stmt.executeQuery();
-
                 PreparedStatement insStmt = db.getPreparedStatement("insert into \"Requires\" values( ?, ?, ?);");
                 if(rs.next()){
                     // set up requires relation if ingredient is already in table
-                    insStmt.setInt(1, id);
+                    insStmt.setInt(1, rid);
                     insStmt.setString(2, ing.getIngredientName());
                     insStmt.setInt(3, Integer.parseInt(tokens[1]));
                     db.execStatementUpdate(insStmt);
-                    continue;
+                    stmt.close();
                 }
                 else{
                     ing.InsertEntity();
                     insStmt = db.getPreparedStatement("insert into \"Requires\" values( ?, ?, ?);");
-                    insStmt.setInt(1, id);
+                    insStmt.setInt(1, rid);
                     insStmt.setString(2, ing.getIngredientName());
                     insStmt.setInt(3, Integer.parseInt(tokens[1]));
                     db.execStatementUpdate(insStmt);
-                    continue;
+                    insStmt.close();
                 }
-                /*
-                PreparedStatement statement = db.getPreparedStatement("select count(1) from \"Ingredient\" where \"ingredientname\" = ? ");
-                statement.setString(1, tokens[0]);
-                ResultSet results = db.execStatementQuery(statement);
-                results.next();
-                if(results.getInt(1) > 0){
-                    continue;
-                }else{
-                    Ingredient newIngredient = new Ingredient(db);
-                    Map<String, Object> ingredientMap = new HashMap<>();
-                    ingredientMap.put("ingredientname", tokens[0]);
-                    newIngredient.configEntity(ingredientMap);
-                    newIngredient.InsertEntity();
-                    statement.close();
-                }
-
-                 */
-
-
 
             }
             catch (SQLException e) {
                 e.printStackTrace();
             }
-
-
-
-            // set up requires relation if ingredient was not already in table
-
-
-
-
-
-
-
-
-            /*
-            Requires req = new Requires(db);
-            Map<String, Object> reqMap = new HashMap<>();
-            reqMap.put("recipeid", id);
-            reqMap.put("ingredientname", tokens[0]);
-            reqMap.put("quantity", Integer.parseInt(tokens[1]));
-            req.configEntity(reqMap);
-            req.InsertEntity();
-            */
-
         }
+    }
+
+    public static void relateToAuthor(DBInterface db, int rid, User user){
+        Authors author = new Authors(db);
+        Map<String, Object> authorsMap = new HashMap<>();
+        authorsMap.put("recipeid", rid);
+        authorsMap.put("username", user.getUserName());
+        author.configEntity(authorsMap);
+        author.InsertEntity();
     }
 }

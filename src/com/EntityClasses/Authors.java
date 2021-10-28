@@ -25,6 +25,8 @@ public class Authors implements EntityType{
         try {
             stmt.setString(1, this.username);
             stmt.setInt(2, this.recipeID);
+            stmt.executeUpdate();
+            stmt.close();
             return true;
         }catch (SQLException se){
             return false;
