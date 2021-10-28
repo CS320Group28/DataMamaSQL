@@ -13,6 +13,12 @@ public class CreateRecipe {
 
     private static Scanner scan = new Scanner(System.in);
 
+
+    /**
+     * Handles all logic and user input for creating a Recipe and setting up relevant relations
+     * @param db database interface to use with a connection.
+     * @param user user that is associated with creating the recipe.
+     */
     public static Recipe CreateRecipeCLI(DBInterface db, User user){
 
         System.out.print("Enter recipe name: ");
@@ -88,6 +94,12 @@ public class CreateRecipe {
 
         return recipe;
     }
+
+    /**
+     * Setup the ingredient requirements for a new recipe, handles user input.
+     * @param db database instance
+     * @param rid recipe id
+     */
     private static void setupIngredients(DBInterface db, int rid){
 
 
@@ -140,7 +152,7 @@ public class CreateRecipe {
         }
     }
 
-    public static void relateToAuthor(DBInterface db, int rid, User user){
+    private static void relateToAuthor(DBInterface db, int rid, User user){
         Authors author = new Authors(db);
         Map<String, Object> authorsMap = new HashMap<>();
         authorsMap.put("recipeid", rid);

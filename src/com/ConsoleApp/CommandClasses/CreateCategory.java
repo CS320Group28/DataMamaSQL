@@ -15,6 +15,10 @@ public class CreateCategory {
 
     private static final Scanner in = new Scanner(System.in);
 
+    /**
+     * Handles all logic and user input for creating a Category and setting up relevant relations
+     * @param db database interface to use with a connection.
+     */
     public static void CreateCategoryCLI(DBInterface db){
 
         Category ct = new Category(db);
