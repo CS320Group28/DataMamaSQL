@@ -121,7 +121,8 @@ public class DriverApplication {
                                 break;
                         }
                     } catch (Exception e) {
-                        //scan.nextLine();
+                        //clear the input buffer
+                        scan.nextLine();
                         System.out.println("Enter the number of the list item.");
                     }
                 }
