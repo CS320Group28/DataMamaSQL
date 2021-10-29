@@ -11,7 +11,7 @@ import java.util.*;
 
 public class SortRecipes {
 
-    private static Scanner scan = new Scanner(System.in);
+    private static final Scanner scan = new Scanner(System.in);
     private static int ad;
 
     public static void SortByNameCLI(DBInterface db){
@@ -19,7 +19,7 @@ public class SortRecipes {
         System.out.println("\t1. Alphabetical");
         System.out.println("\t2. Reverse Alphabetical");
         System.out.print(">> ");
-        ad = scan.nextInt();
+        ad = scan.nextInt(); // check for ascending or descending
         switch(ad){
             case 1:
                 try {
@@ -60,7 +60,7 @@ public class SortRecipes {
         System.out.println("\t1. Lowest Rated");
         System.out.println("\t2. Highest Rated");
         System.out.print(">> ");
-        ad = scan.nextInt();
+        ad = scan.nextInt(); // check for ascending or descending
 
         switch(ad){
             case 1:
@@ -104,7 +104,7 @@ public class SortRecipes {
         System.out.println("\t1. Oldest");
         System.out.println("\t2. Newest");
         System.out.print(">> ");
-        ad = scan.nextInt();
+        ad = scan.nextInt(); // check for ascending or descending
 
         switch(ad){
             case 1:
@@ -162,7 +162,8 @@ public class SortRecipes {
             String rating =  rs.getString("Rating");
             String creationDate = rs.getString("CreationDate");
 
-            System.out.print("RecipeName: " + String.format("%1$-32s", recipeName));
+            System.out.print("RecipeName: " + String.format("%1$-32s", recipeName)); // 1$ indicates the first argument of the string
+                                                                                     // -32 indicates a right padded string of 32 characters
             System.out.print("Rating: " + String.format("%1$-4s", rating));
             System.out.println("CreationDate: " + creationDate);
         }
