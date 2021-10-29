@@ -4,3 +4,4 @@
 out
 src/com/config.txt
 .vscode
+*.jar
