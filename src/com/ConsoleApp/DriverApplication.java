@@ -16,7 +16,6 @@ public class DriverApplication {
      */
 
     private static final DBInterface db = new DBInterface();
-
     private static final Scanner scan = new Scanner(System.in);
 
 

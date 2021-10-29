@@ -3,7 +3,9 @@ package com.EntityClasses;
 import com.DBInterface;
 
 import java.sql.PreparedStatement;
+import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.sql.Statement;
 import java.util.Map;
 
 public class Authors implements EntityType{
@@ -41,5 +43,21 @@ public class Authors implements EntityType{
     @Override
     public boolean UpdateEntity() {
         return EntityType.super.UpdateEntity();
+    }
+
+    public static String getAuthorName(int RecipeID, DBInterface db){
+        PreparedStatement stmt = db.getPreparedStatement("select \"username\" from \"Authors\" where \"recipeid\" = ?");
+        try{
+            stmt.setInt(1, RecipeID);
+            ResultSet rs = db.execStatementQuery(stmt);
+            if(rs.next()){
+                return rs.getString("username");
+            }
+        }catch(SQLException e){
+            System.err.println(e.getMessage());
+            e.printStackTrace();
+            return null;
+        }
+        return null;
     }
 }
