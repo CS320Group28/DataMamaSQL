@@ -22,6 +22,8 @@ public class SortRecipes {
         System.out.println("\t2. Reverse Alphabetical");
         System.out.print(">> ");
         ad = scan.nextInt(); // check for ascending or descending
+        scan.nextLine();
+
         switch(ad){
             case 1:
                 try {
@@ -63,6 +65,7 @@ public class SortRecipes {
         System.out.println("\t2. Highest Rated");
         System.out.print(">> ");
         ad = scan.nextInt(); // check for ascending or descending
+        scan.nextLine();
 
         switch(ad){
             case 1:
@@ -107,7 +110,7 @@ public class SortRecipes {
         System.out.println("\t2. Newest");
         System.out.print(">> ");
         ad = scan.nextInt(); // check for ascending or descending
-
+        scan.nextLine();
         switch(ad){
             case 1:
                 try{
