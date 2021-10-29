@@ -56,6 +56,8 @@ public class DriverApplication {
                             System.out.println("\t1. Sort by name");
                             System.out.println("\t2. Sort by rating");
                             System.out.println("\t3. Sort by most recent");
+                            System.out.println("\t4. Search for a recipe by name");
+                            System.out.println("\t5. Select a recipe by ID");
                             System.out.print(">> ");
                             rSort = scan.nextInt();
                             switch(rSort){
@@ -68,8 +70,16 @@ public class DriverApplication {
                                     SortRecipes.SortByRatingCLI(db);
                                     break;
                                 case 3:
-                                    System.out.println("sorting by most recent");
+                                    System.out.println("sorting by recent...");
                                     SortRecipes.SortByRecentCLI(db);
+                                    break;
+                                case 4:
+                                    System.out.println("preparing search by name...");
+                                    SortRecipes.SearchByName(db);
+                                    break;
+                                case 5:
+                                    System.out.println("prepared search by id...");
+                                    SortRecipes.SelectByID(db);
                                     break;
                             }
                             break;
