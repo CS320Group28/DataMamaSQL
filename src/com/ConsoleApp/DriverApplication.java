@@ -5,6 +5,7 @@ import java.util.Scanner;
 
 import com.*;
 import com.ConsoleApp.CommandClasses.*;
+import com.EntityClasses.Recipe;
 import com.EntityClasses.User;
 
 public class DriverApplication {
@@ -53,6 +54,8 @@ public class DriverApplication {
                     System.out.println("\t1. Add Category");
                     System.out.println("\t2. Author Recipe");
                     System.out.println("\t3. Search Recipes");
+                    System.out.println("\t4. Add ingedients to your pantry");
+                    System.out.println("\t5. Make a recipe");
                     System.out.println("\t99. Logout");
                     System.out.println("\t100. Exit");
 
@@ -112,7 +115,53 @@ public class DriverApplication {
                                         break;
                                 }
                                 break;
+                            // adding ingredients to pantry case
+                            case 4:
+                                System.out.println("Adding ingredients to your pantry...");
+                                AddIngredients.AddIngredientsCLI(db, user);
+                                break;
                             //logout case
+
+                            //make recipe case
+                            case 5:
+                                System.out.println("Here is our menu for sorting and searching recipes; after you're done, select a recipe with the ID");
+                                System.out.println("\t1. Sort by name");
+                                System.out.println("\t2. Sort by rating");
+                                System.out.println("\t3. Sort by most recent");
+                                System.out.println("\t4. Search for recipes by name");
+                                System.out.println("\t5. Make a recipe by ID");
+                                System.out.print(">> ");
+                                rSort = scan.nextInt();
+                                //this switch acts on the cases for the rSort value which will be an integer
+                                //representing items in the list
+                                switch (rSort) {
+                                    //name sorting case
+                                    case 1:
+                                        System.out.println("sorting by name...");
+                                        SearchRecipes.SortByNameCLI(db);
+                                        break;
+                                    //rating sorting case
+                                    case 2:
+                                        System.out.println("sorting by rating...");
+                                        SearchRecipes.SortByRatingCLI(db);
+                                        break;
+                                    //chronological sorting case
+                                    case 3:
+                                        System.out.println("sorting by most recent");
+                                        SearchRecipes.SortByRecentCLI(db);
+                                        break;
+                                    case 4:
+                                        System.out.println("preparing search by name...");
+                                        SearchRecipes.SearchByName(db);
+                                        break;
+                                    case 5:
+                                        System.out.println("prepared search by id...");
+                                        Recipe recipe = SearchRecipes.SelectByID(db);
+                                        MakeRecipe.makeRecipe(db, user, recipe);
+                                        break;
+                                }
+                                break;
+
                             case 99:
                                 System.out.println("Logging out...");
                                 user = null;
@@ -131,6 +180,7 @@ public class DriverApplication {
                         }
                     } catch (Exception e) {
                         scan.nextLine();
+                        System.err.println(e.getMessage());
                         System.out.println("Enter the number of the list item.");
                     }
                 }

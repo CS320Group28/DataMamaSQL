@@ -2,11 +2,13 @@ package com.ConsoleApp.CommandClasses;
 
 import com.DBInterface;
 import com.EntityClasses.*;
+import com.EntityClasses.Recipe.Difficulty;
 
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
+import java.time.LocalDateTime;
 import java.util.*;
 
 import javax.sql.rowset.serial.SerialRef;
@@ -169,7 +171,7 @@ public class SearchRecipes {
         }
     }
 
-    public static void SelectByID(DBInterface db){
+    public static Recipe SelectByID(DBInterface db){
         Integer id = null;
         while(id == null){
             System.out.print("Enter the ID of the recipe: ");
@@ -196,17 +198,33 @@ public class SearchRecipes {
                 String recipeName = rs.getString("RecipeName");
                 String description = rs.getString("Description");
                 int cookTime = rs.getInt("CookTime");
-                String steps = rs.getString("steps");
+                String steps = rs.getString("Steps");
+                int rating = rs.getInt("Rating");
+                int difficulty = rs.getInt("Difficulty");
+                int servings = rs.getInt("Servings");
+                LocalDateTime creationDate = (LocalDateTime)rs.getObject("CreationDate");
                 System.out.println("You are viewing " + recipeName); // add "by ..."
                 System.out.println("Description: " + description + "\n");
                 System.out.printf("This will take %d minutes.\n\n", cookTime);
                 System.out.println("STEPS");
                 System.out.println(steps);
+
+                Recipe recipe = new Recipe(db);
+                recipe.setCookTime(cookTime);
+                recipe.setCreationDate(creationDate);
+                recipe.setDescription(description);
+                recipe.setDifficulty(Difficulty.values()[difficulty]);
+                recipe.setRating(rating);
+                recipe.setRecipeName(recipeName);
+                recipe.setServings(servings);
+                recipe.setSteps(steps);
+                return recipe;
             }
         } catch (SQLException e) {
             System.err.println(e.getMessage());
             e.printStackTrace();
         }
+        return null;
     }
 
 
@@ -215,14 +233,16 @@ public class SearchRecipes {
      * a simple helper function that prints the ResultSet obtained by sorting the recipes in the proper format.
      * @param rs
      * @throws SQLException
+     * @returns the ID of the recipe
      */
     private static void formatRS(ResultSet rs) throws SQLException{
         if(rs == null){
             System.err.println("error retrieving results");
             return;
         }
+        int recipeID;
         while(rs.next()){
-            int recipeID = rs.getInt("RecipeID");
+            recipeID = rs.getInt("RecipeID");
             String recipeName = rs.getString("RecipeName");
             String rating =  rs.getString("Rating");
             String creationDate = rs.getString("CreationDate");
@@ -238,7 +258,6 @@ public class SearchRecipes {
             System.out.print(" Created By: " + String.format("%1$-32s", author));
             System.out.println(" CreationDate: " + creationDate);
         }
-
     }
 
 }
