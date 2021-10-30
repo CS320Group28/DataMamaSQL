@@ -2,6 +2,7 @@ package com.EntityClasses;
 
 import java.sql.PreparedStatement;
 import java.sql.SQLException;
+import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.Map;
 import java.util.Objects;
@@ -10,7 +11,7 @@ import com.DBInterface;
 public class Pantry implements EntityType<Pantry>{
     private String username;
     private String ingredientName;
-    private LocalDateTime expirationDate;
+    private LocalDate expirationDate;
     private LocalDateTime purchaseDate;
     private String aisle;
     private int quantityBought;
@@ -28,7 +29,7 @@ public class Pantry implements EntityType<Pantry>{
     public void configEntity(Map<String, Object> attributes) {
         this.username = (String) Objects.requireNonNull(attributes.get("username"));
         this.ingredientName = (String) Objects.requireNonNull(attributes.get("ingredientname"));
-        this.expirationDate = (LocalDateTime) Objects.requireNonNull(attributes.get("expirationdate"));
+        this.expirationDate = (LocalDate) Objects.requireNonNull(attributes.get("expirationdate"));
         this.purchaseDate = (LocalDateTime) Objects.requireNonNull(attributes.get("purchasedate"));
         this.aisle = (String) Objects.requireNonNull(attributes.get("aisle"));
         this.quantityBought = (int) Objects.requireNonNull(attributes.get("quantitybought"));
@@ -45,7 +46,7 @@ public class Pantry implements EntityType<Pantry>{
     public DBInterface getDb() {
         return db;
     }
-    public LocalDateTime getExpirationDate() {
+    public LocalDate getExpirationDate() {
         return expirationDate;
     }
     public String getIngredientName() {
@@ -66,7 +67,7 @@ public class Pantry implements EntityType<Pantry>{
     public void setCurrentQuantity(int currentQuantity) {
         this.currentQuantity = currentQuantity;
     }
-    public void setExpirationDate(LocalDateTime expirationDate) {
+    public void setExpirationDate(LocalDate expirationDate) {
         this.expirationDate = expirationDate;
     } 
     public void setIngredientName(String ingredientName) {
@@ -90,7 +91,7 @@ public class Pantry implements EntityType<Pantry>{
 
     @Override
     public boolean InsertEntity(){
-        String sql = "insert into \"PutsIntoPantry\" values(?, ?, ?, ?, ?, ?, ?, ?)";
+        String sql = "insert into \"PutsIntoPantry\" values(?, ?, ?, ?, ?, ?, ?)";
         PreparedStatement stmt = db.getPreparedStatement(sql);
         try{
             stmt.setString(1, username);
@@ -101,8 +102,10 @@ public class Pantry implements EntityType<Pantry>{
             stmt.setInt(6, quantityBought);
             stmt.setInt(7, currentQuantity);
             db.execStatementUpdate(stmt);
+            stmt.close();
             return true;
         }catch(SQLException e){
+            e.printStackTrace();
             System.err.println("Failed to add to pantry");
             return false;
         }
@@ -126,13 +129,11 @@ public class Pantry implements EntityType<Pantry>{
             stmt.setString(5, ingredientName);
             stmt.setObject(6, expirationDate);
             db.execStatementUpdate(stmt);
+            stmt.close();
             return true;
-    }catch(SQLException e){
-        System.err.println("Failed to update existing pantry stock");
-        return false;
+        }catch(SQLException e){
+            System.err.println("Failed to update existing pantry stock");
+            return false;
+        }
     }
-
-
-  
-    
 }

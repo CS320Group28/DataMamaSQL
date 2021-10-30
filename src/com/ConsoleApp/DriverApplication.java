@@ -53,6 +53,7 @@ public class DriverApplication {
                     System.out.println("\t1. Add Category");
                     System.out.println("\t2. Author Recipe");
                     System.out.println("\t3. Sort Recipes");
+                    System.out.println("\t4. Add ingedients to your pantry");
                     System.out.println("\t99. Logout");
                     System.out.println("\t100. Exit");
 
@@ -112,6 +113,11 @@ public class DriverApplication {
                                         break;
                                 }
                                 break;
+                            // adding ingredients to pantry case
+                            case 4:
+                                System.out.println("Adding ingredients to your pantry...");
+                                AddIngredients.AddIngredientsCLI(db, user);
+                                break;
                             //logout case
                             case 99:
                                 System.out.println("Logging out...");
@@ -131,6 +137,7 @@ public class DriverApplication {
                         }
                     } catch (Exception e) {
                         scan.nextLine();
+                        System.err.println(e.getMessage());
                         System.out.println("Enter the number of the list item.");
                     }
                 }
