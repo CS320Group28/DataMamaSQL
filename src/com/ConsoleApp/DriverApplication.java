@@ -91,25 +91,25 @@ public class DriverApplication {
                                     //name sorting case
                                     case 1:
                                         System.out.println("sorting by name...");
-                                        SortRecipes.SortByNameCLI(db);
+                                        SearchRecipes.SortByNameCLI(db);
                                         break;
                                     //rating sorting case
                                     case 2:
                                         System.out.println("sorting by rating...");
-                                        SortRecipes.SortByRatingCLI(db);
+                                        SearchRecipes.SortByRatingCLI(db);
                                         break;
                                     //chronological sorting case
                                     case 3:
                                         System.out.println("sorting by most recent");
-                                        SortRecipes.SortByRecentCLI(db);
+                                        SearchRecipes.SortByRecentCLI(db);
                                         break;
                                     case 4:
                                         System.out.println("preparing search by name...");
-                                        SortRecipes.SearchByName(db);
+                                        SearchRecipes.SearchByName(db);
                                         break;
                                     case 5:
                                         System.out.println("prepared search by id...");
-                                        SortRecipes.SelectByID(db);
+                                        SearchRecipes.SelectByID(db);
                                         break;
                                 }
                                 break;
