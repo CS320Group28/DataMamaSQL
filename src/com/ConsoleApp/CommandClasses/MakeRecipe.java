@@ -10,7 +10,7 @@ import com.EntityClasses.User;
 public class MakeRecipe {
 
 
-    public static void makeRecipe(DBInterface db, User user, Recipe recipe){
+    public static void makeRecipe(DBInterface db, User user, Recipe recipe, double scale){
         /**
          * First: get the required ingredients and their quantities.
          *        select ingredientname, quantity from requires where recipeid = recipeid
@@ -20,10 +20,12 @@ public class MakeRecipe {
          *  this might be faster with a join, not sure, too complicated.
          *       for each key in map<String, int>
          *  
-         *          neededquantity =  map.get(key)
+         *          neededquantity =  map.get(key) * scale // this is going to be a problem because a scale of .25 would round 8, 9, 10 all down to 2; we might need to make quantities of ingredients doubles
+         *          (POTENTIALLY ALGORITHMICALLY DETERMINE PROPER SCALING, MAKING SURE THE SCALE ISN'T TOO LOW TO MAKE INGREDIENTS 0)
+         * 
          *          query select currentquantity where username=user.getname and ingredientname = ingredient.getname()
          *          for each currentquantity
-            *          neededquantity - currentquantity
+            *          neededquantity -= currentquantity
             *          if needquatntiy <= 0, break
             *       if neededquantitiy > 0 //still need more
             *          cant make it
