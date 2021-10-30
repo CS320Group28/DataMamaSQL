@@ -11,12 +11,12 @@ import java.util.*;
 
 import javax.sql.rowset.serial.SerialRef;
 
-public class SortRecipes {
+public class SearchRecipes {
 
     private static final Scanner scan = new Scanner(System.in);
     private static int ad;
     private DBInterface db;
-    public SortRecipes(DBInterface db){
+    public SearchRecipes(DBInterface db){
         this.db = db;
     }
     public static void SortByNameCLI(DBInterface db){
