@@ -202,7 +202,7 @@ public class SearchRecipes {
                 int rating = rs.getInt("Rating");
                 int difficulty = rs.getInt("Difficulty");
                 int servings = rs.getInt("Servings");
-                LocalDateTime creationDate = (LocalDateTime)rs.getObject("CreationDate");
+                LocalDateTime creationDate = rs.getTimestamp("CreationDate").toLocalDateTime();
                 System.out.println("You are viewing " + recipeName); // add "by ..."
                 System.out.println("Description: " + description + "\n");
                 System.out.printf("This will take %d minutes.\n\n", cookTime);
@@ -210,6 +210,7 @@ public class SearchRecipes {
                 System.out.println(steps);
 
                 Recipe recipe = new Recipe(db);
+                recipe.setRecipeID(rid);
                 recipe.setCookTime(cookTime);
                 recipe.setCreationDate(creationDate);
                 recipe.setDescription(description);

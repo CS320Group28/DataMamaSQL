@@ -206,9 +206,9 @@ public class Recipe implements EntityType<Recipe>{
         return false;
     }
 
-    public static void main(String[] args) {
-        //new Recipe(1, "recipeName", "steps", 1, "description",2, 5, 6, LocalDateTime.now());
-        
+    @Override
+    public String toString() {
+        return String.format("Name: %s, ID:%s", this.recipeName, this.recipeID);
     }
 
 }

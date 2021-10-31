@@ -157,6 +157,7 @@ public class DriverApplication {
                                     case 5:
                                         System.out.println("prepared search by id...");
                                         Recipe recipe = SearchRecipes.SelectByID(db);
+                                        System.out.println(recipe);
                                         System.out.print("How would you like to scale this recipe? <scaler>: ");
                                         double scale = scan.nextDouble(); scan.nextLine();
                                         MakeRecipe.makeRecipe(db, user, recipe, scale);
@@ -180,6 +181,11 @@ public class DriverApplication {
                                 System.out.println(select + " is not an option.");
                                 break;
                         }
+
+                    }catch(SQLException e){
+                        scan.nextLine();
+                        e.printStackTrace();
+                        System.err.println("Something went wrong with the database.");
                     } catch (Exception e) {
                         scan.nextLine();
                         System.err.println(e.getMessage());
