@@ -21,7 +21,7 @@ public class AddIngredients {
     private static final Scanner scan = new Scanner(System.in);
 
     // parse dates as mm/dd/yyyy
-    private static final DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd/MM/uuuu");
+    private static final DateTimeFormatter formatter = DateTimeFormatter.ofPattern("MM/dd/uuuu");
     public static void AddIngredientsCLI(DBInterface db, User user){
         System.out.println("Enter Ingredients to add to your pantry below");
         String ingredient = "";
