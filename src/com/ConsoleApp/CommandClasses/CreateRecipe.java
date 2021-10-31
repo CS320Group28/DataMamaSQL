@@ -19,11 +19,12 @@ public class CreateRecipe {
      * @param db database interface to use with a connection.
      * @param user user that is associated with creating the recipe.
      */
-    public static Recipe CreateRecipeCLI(DBInterface db, User user){
+    public static Recipe CreateRecipeCLI(DBInterface db, User user) throws SQLException{
 
         System.out.print("Enter recipe name: ");
         String recipeName = scan.nextLine();
-
+   
+        
         System.out.print("Enter the cooktime in minutes: ");
         int cookTime = scan.nextInt();
         scan.nextLine();
@@ -68,21 +69,21 @@ public class CreateRecipe {
         recipe.configEntity(recipeMap);
         recipe.InsertEntity();
 
-        int rid = -1;
-        try {
-            PreparedStatement stmt = db.getPreparedStatement("select \"RecipeID\" from \"Recipe\" where \"RecipeName\" = ?"
-                                                        + " and \"CreationDate\" = ?");
-            stmt.setString(1, recipeName);
-            stmt.setObject(2, recipe.getCreationDate());
-            ResultSet rs = db.execStatementQuery(stmt);
 
-            if(rs.next()) {
-                rid = rs.getInt(1);
-                stmt.close();
-            }
-        } catch (SQLException e) {
-            e.printStackTrace();
+        int rid = -1;
+
+        // Get the recipe ID that was generated for the recipe just made.
+        PreparedStatement stmt = db.getPreparedStatement("select \"RecipeID\" from \"Recipe\" where \"RecipeName\" = ?"
+                                                    + " and \"CreationDate\" = ?");
+        stmt.setString(1, recipeName);
+        stmt.setObject(2, recipe.getCreationDate());
+        ResultSet rs = db.execStatementQuery(stmt);
+
+        if(rs.next()) {
+            rid = rs.getInt(1);
+            stmt.close();
         }
+
         if(rid < 0){
             System.err.println("rId was not able to be retrieved, try again.");
             return null; //broken as hell PDM wins
@@ -90,10 +91,43 @@ public class CreateRecipe {
 
         setupIngredients(db, rid);
         relateToAuthor(db, rid, user);
-        //scan.close();
+
+        String category = null;
+        do{
+            System.out.print("Enter a category (or press enter to skip): ");
+            category = scan.nextLine().strip(); 
+
+            if(category.length() <= 0){
+                return recipe;
+            }
+            ResultSet cats = null;
+            Statement hasCat = null;
+
+            hasCat = db.getStatement();
+            String sql = String.format("select \"CategoryID\" from \"Category\" where \"CategoryName\" = '%s'", category);
+            cats = hasCat.executeQuery(sql);
+            if(!cats.next()){
+                Category c = new Category(db);
+                c.setCategoryName(category);
+                c.InsertEntity();
+                cats = hasCat.executeQuery(sql);
+                cats.next();         
+            }
+            do{ //if cats.next() is true, do this (before calling rs.next() again)
+                int categoryID = cats.getInt(1);
+                PreparedStatement st = db.getPreparedStatement("insert into \"HasCategory\" values(?, ?)");
+                st.setInt(1, rid);
+                st.setInt(2, categoryID);
+                db.execStatementUpdate(st);
+            }while(cats.next());
+
+        }while(category.length() > 0);
 
         return recipe;
     }
+
+
+
 
     /**
      * Setup the ingredient requirements for a new recipe, handles user input.
