@@ -91,14 +91,20 @@ public class CreateRecipe {
 
         setupIngredients(db, rid);
         relateToAuthor(db, rid, user);
+        relateCategories(db, rid);
+        
+        return recipe;
+    }
 
+
+    private static void relateCategories(DBInterface db, int rid) throws SQLException{
         String category = null;
         do{
             System.out.print("Enter a category (or press enter to skip): ");
             category = scan.nextLine().strip(); 
 
             if(category.length() <= 0){
-                return recipe;
+                return;
             }
             ResultSet cats = null;
             Statement hasCat = null;
@@ -123,11 +129,7 @@ public class CreateRecipe {
 
         }while(category.length() > 0);
 
-        return recipe;
     }
-
-
-
 
     /**
      * Setup the ingredient requirements for a new recipe, handles user input.
