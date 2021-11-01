@@ -224,7 +224,7 @@ public class Recipe implements EntityType<Recipe>{
 
     @Override
     public boolean UpdateEntity() {
-        String sql = "Update \"Recipe\" Set \"RecipeName\" = ?, \"Steps\" = ?, \"Description\" = ?, \"Servings\" = ?, \"CookTime\", \"Difficulty\"";
+        String sql = "Update \"Recipe\" Set \"RecipeName\" = ?, \"Steps\" = ?, \"Description\" = ?, \"Servings\" = ?, \"CookTime\" = ?, \"Difficulty\" = ? WHERE \"RecipeID\" = ?";
         PreparedStatement stmt = db.getPreparedStatement(sql);
         try {
             stmt.setString(2, steps);
@@ -233,6 +233,7 @@ public class Recipe implements EntityType<Recipe>{
             stmt.setInt(5, cookTime);
             stmt.setString(1, recipeName);
             stmt.setInt(6, difficulty.ordinal());
+            stmt.setInt(7, recipeID);
             db.execStatementUpdate(stmt);
             stmt.close();
             return true;
@@ -244,11 +245,11 @@ public class Recipe implements EntityType<Recipe>{
 
     @Override
     public String toString() {
-        return String.format("Name: %s \n\tID: %s \n\tDescription: %s\nDifficulty: %s", this.recipeName, this.recipeID, this.description, this.difficulty.toString());
+        return String.format("Name: %s \nID: %s \nDescription: %s\nDifficulty: %s", this.recipeName, this.recipeID, this.description, this.difficulty.toString());
     }
 
     public String recipeRepresentation(){
-        return String.format("%s\tCook Time: %s\n\t Servings: %s\n STEPS\n%s", toString(),cookTime, servings, steps);
+        return String.format("%s\nCook Time: %s\nServings: %s\nSTEPS\n%s", toString(),cookTime, servings, steps);
     }
 
 }

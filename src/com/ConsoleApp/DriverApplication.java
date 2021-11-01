@@ -207,6 +207,7 @@ public class DriverApplication {
                                     scan.nextLine();
                                     switch(functionSelect){
                                         case 1:
+                                            EditRecipe.EditRecipeCLI(user, chosenRecipe, db);
                                             valid = true;
                                             break;
                                         case 2:
