@@ -136,4 +136,19 @@ public class Pantry implements EntityType<Pantry>{
             return false;
         }
     }
+
+    @Override
+    public boolean DeleteEntity(){
+        String sql = "delete from \"PutsIntoPantry\" where \"username\" = ? and \"ingredientname\" = ? and \"expirationdate\" = ?";
+        PreparedStatement stmt = db.getPreparedStatement(sql);
+        try{
+            stmt.setString(1, this.username);
+            stmt.setString(2, this.ingredientName);
+            stmt.setObject(3, expirationDate);
+            db.execStatementUpdate(stmt);
+        }catch (SQLException e){
+            return false;
+        }
+        return true;
+    }
 }

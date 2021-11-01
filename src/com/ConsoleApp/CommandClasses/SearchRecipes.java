@@ -161,7 +161,7 @@ public class SearchRecipes {
         
         try{
             System.out.printf("Searching database for %s...\n", name);
-            String sql = String.format("select \"Authors\".\"username\", \"Recipe\".\"RecipeID\", \"Recipe\".\"RecipeName\", \"Recipe\".\"Rating\", \"Recipe\".\"CreationDate\" from \"Recipe\" inner join \"Authors\" on \"Authors\".\"recipeid\" = \"Recipe\".\"RecipeID\" where lower(\"RecipeName\") like '%%%s%%'", name.toLowerCase());
+            String sql = String.format("select \"Authors\".\"username\", \"Recipe\".\"RecipeID\", \"Recipe\".\"RecipeName\", \"Recipe\".\"Rating\", \"Recipe\".\"CreationDate\" from \"Recipe\" inner join \"Authors\" on \"Authors\".\"recipeid\" = \"Recipe\".\"RecipeID\" where lower(\"RecipeName\") like '%%%s%%' order by \"Recipe\".\"RecipeName\"", name.toLowerCase());
             Statement stmt = db.getStatement();
             formatRS(stmt.executeQuery(sql));
             stmt.close();
