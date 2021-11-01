@@ -11,16 +11,11 @@ import java.sql.Statement;
 import java.time.LocalDateTime;
 import java.util.*;
 
-import javax.sql.rowset.serial.SerialRef;
 
 public class SearchRecipes {
 
     private static final Scanner scan = new Scanner(System.in);
     private static int ad;
-    private DBInterface db;
-    public SearchRecipes(DBInterface db){
-        this.db = db;
-    }
     public static void SortByNameCLI(DBInterface db){
         System.out.println("Sort by...");
         System.out.println("\t1. Alphabetical");

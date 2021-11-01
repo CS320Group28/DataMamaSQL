@@ -136,7 +136,7 @@ public class CreateRecipe {
      * @param db database instance
      * @param rid recipe id
      */
-    private static void setupIngredients(DBInterface db, int rid){
+    public static void setupIngredients(DBInterface db, int rid){
 
 
         System.out.println("Enter list of ingredients and the required quantity below.");

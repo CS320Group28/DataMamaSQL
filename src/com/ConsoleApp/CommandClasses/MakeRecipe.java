@@ -8,7 +8,6 @@ import java.time.LocalDateTime;
 import java.util.HashMap;
 import java.util.Map;
 
-import javax.sound.midi.Patch;
 
 import com.DBInterface;
 import com.EntityClasses.Makes;

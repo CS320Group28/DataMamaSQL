@@ -3,7 +3,6 @@ package com.EntityClasses;
 import java.sql.PreparedStatement;
 import java.sql.SQLException;
 import java.time.LocalDateTime;
-import java.util.HashMap;
 import java.util.Map;
 
 import com.DBInterface;

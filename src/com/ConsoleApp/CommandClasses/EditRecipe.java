@@ -4,6 +4,7 @@ import com.DBInterface;
 import com.EntityClasses.Recipe;
 import com.EntityClasses.User;
 
+import java.sql.PreparedStatement;
 import java.sql.SQLException;
 import java.util.Scanner;
 
@@ -13,13 +14,14 @@ public class EditRecipe {
         boolean valid = false;
         while(!valid) {
             System.out.println(recipe.recipeRepresentation());
-            System.out.println("\t1. Recipe Name");
-            System.out.println("\t2. Description");
-            System.out.println("\t3. Steps");
-            System.out.println("\t4. Cook Time");
-            System.out.println("\t5. Servings");
-            System.out.println("\t6. Difficulty");
-            System.out.println("\t7. Submit Changes");
+            System.out.println("\t1. Edit Recipe Name");
+            System.out.println("\t2. Edit Description");
+            System.out.println("\t3. Edit Steps");
+            System.out.println("\t4. Edit Cook Time");
+            System.out.println("\t5. Edit Servings");
+            System.out.println("\t6. Edit Difficulty");
+            System.out.println("\t7. Edit Ingrerdients");
+            System.out.println("\t8. Submit Changes");
             System.out.print(">> ");
             try{
                 int select = scan.nextInt();
@@ -52,6 +54,11 @@ public class EditRecipe {
                         recipe.setDifficulty(Recipe.Difficulty.values()[Integer.parseInt(scan.nextLine().strip())]);
                         break;
                     case 7:
+                        System.out.println("Clearing ingredients for this recipe...");
+                        deleteRequiredIngredients(db, recipe.getRecipeID());
+                        CreateRecipe.setupIngredients(db, recipe.getRecipeID());
+                        break;
+                    case 8:
                         System.out.println("Saving changes...");
                         recipe.UpdateEntity();
                         valid = true;
@@ -69,7 +76,7 @@ public class EditRecipe {
             }
         }
     }
-    public static String stepsLoop(Scanner scan){
+    private static String stepsLoop(Scanner scan){
         String steps = "";
         String clause = "";
         StringBuilder sb = new StringBuilder(steps);
@@ -82,5 +89,12 @@ public class EditRecipe {
             sb.append(clause + "\n");
         }
         return sb.toString();
+    }
+
+    private static void deleteRequiredIngredients(DBInterface db, int recipeID) throws SQLException{
+        String sql = "Delete from \"Requires\" where \"recipeid\" = ?";
+        PreparedStatement stmt = db.getPreparedStatement(sql);
+        stmt.setInt(1, recipeID);
+        db.execStatementUpdate(stmt);
     }
 }

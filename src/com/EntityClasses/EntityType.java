@@ -3,7 +3,6 @@ package com.EntityClasses;// file: EntityClasses.EntityType.java
 
 import java.util.Map;
 
-import com.DBInterface;
 
 /**
  /**
