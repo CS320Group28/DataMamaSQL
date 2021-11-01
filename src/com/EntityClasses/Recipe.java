@@ -3,6 +3,7 @@ package com.EntityClasses;
 import java.sql.PreparedStatement;
 import java.sql.SQLException;
 import java.time.LocalDateTime;
+import java.util.HashMap;
 import java.util.Map;
 
 import com.DBInterface;
@@ -36,7 +37,19 @@ public class Recipe implements EntityType<Recipe>{
 
     //for making a new recipe, where the recipe ID has not been determined by the table yet.
 
-    /** 
+
+    public Recipe(int recipeID, String recipeName, String steps, String description, int servings, int cookTime, Difficulty difficulty, DBInterface db) {
+        this.recipeID = recipeID;
+        this.recipeName = recipeName;
+        this.steps = steps;
+        this.description = description;
+        this.servings = servings;
+        this.cookTime = cookTime;
+        this.difficulty = difficulty;
+        this.db = db;
+    }
+
+    /**
     public Recipe(String recipeName, String steps, int rating, String description, float servings, int cookTime, int difficulty, LocalDateTime creationDate){
         Objects.requireNonNull(recipeName, "Recipe Name must not be null");
         Objects.requireNonNull(steps, "steps must not be null");
@@ -73,8 +86,7 @@ public class Recipe implements EntityType<Recipe>{
         this.difficulty = Difficulty.values()[difficulty];
         this.creationDate = creationDate;
     }
-    */
-    
+    /*
 
 
     /**
@@ -232,7 +244,7 @@ public class Recipe implements EntityType<Recipe>{
 
     @Override
     public String toString() {
-        return String.format("Name: %s, ID:%s", this.recipeName, this.recipeID);
+        return String.format("Name: %s \n\tID: %s \n\tDescription: %s\n", this.recipeName, this.recipeID, this.description);
     }
 
 }

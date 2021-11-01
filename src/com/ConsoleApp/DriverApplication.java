@@ -1,6 +1,8 @@
 package com.ConsoleApp;
 import java.sql.SQLException;
+import java.sql.SQLOutput;
 import java.util.ArrayList;
+import java.util.Locale;
 import java.util.Scanner;
 
 import com.*;
@@ -56,6 +58,7 @@ public class DriverApplication {
                     System.out.println("\t3. Search Recipes");
                     System.out.println("\t4. Add ingedients to your pantry");
                     System.out.println("\t5. Make a recipe");
+                    System.out.println("\t6. Edit or Delete Recipe");
                     System.out.println("\t99. Logout");
                     System.out.println("\t100. Exit");
 
@@ -120,7 +123,6 @@ public class DriverApplication {
                                 System.out.println("Adding ingredients to your pantry...");
                                 AddIngredients.AddIngredientsCLI(db, user);
                                 break;
-                            //logout case
 
                             //make recipe case
                             case 5:
@@ -165,6 +167,62 @@ public class DriverApplication {
                                 }
                                 break;
 
+                            case 6:
+                                System.out.println("Your Recipes: ");
+
+                                //list of recipes to either edit or delete
+                                ArrayList<Recipe> recipes = RecipeListForDeleteOrEdit.getRecipes(db, user);
+
+                                //print the recipes from the list
+                                for(int i = 0; i < recipes.size(); i++){
+                                    System.out.println(i+1 + ".) " + recipes.get(i));
+                                }
+
+                                //selection loop for recipes
+                                int recipeSelect = recipes.size();
+                                //if the selection is not within the acceptable range, allow the user to try again
+                                while(recipeSelect >= recipes.size() || recipeSelect < 0) {
+                                    try {
+                                        System.out.print(">> ");
+                                        recipeSelect = scan.nextInt() - 1;
+                                        scan.nextLine();
+                                        if (recipeSelect >= recipes.size() || recipeSelect < 0) {
+                                            System.out.println("Index out of acceptable range.");
+                                        }
+                                    }catch(Exception e){
+                                        System.out.println("Enter the number representing the list item.");
+                                        recipeSelect = recipes.size();
+                                    }
+                                }
+
+                                //set the chosen recipe
+                                Recipe chosenRecipe = recipes.get(recipeSelect);
+                                System.out.println("Selected Recipe: " + chosenRecipe);
+                                boolean valid = false;
+                                //allow the user to edit or delete the recipe
+                                while(!valid){
+                                    System.out.println("1. Edit Recipe");
+                                    System.out.println("2. Delete Recipe");
+                                    int functionSelect = scan.nextInt();
+                                    scan.nextLine();
+                                    switch(functionSelect){
+                                        case 1:
+                                            valid = true;
+                                            break;
+                                        case 2:
+                                            System.out.println("Are you sure? (y/Y or n/N)");
+                                            if(scan.nextLine().toLowerCase().equals("y")){
+                                                chosenRecipe.DeleteEntity();
+                                                valid = true;
+                                            }
+                                            break;
+                                        default:
+                                            break;
+                                    }
+                                }
+
+                                break;
+                            //logout case
                             case 99:
                                 System.out.println("Logging out...");
                                 user = null;
