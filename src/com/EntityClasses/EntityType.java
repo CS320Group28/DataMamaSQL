@@ -1,40 +1,34 @@
-package com.EntityClasses;// file: EntityClasses.EntityType.java
-//
+package com.EntityClasses;
 
 import java.util.Map;
 
 import com.DBInterface;
 
-/**
- /**
- * This interface will be implemented by all Entity Type classes.
- */
 public interface EntityType<T> {
-
+    /**
+     * Set the attributes for an Entity object using a map of attributes
+     */
     public void configEntity(Map<String, Object> attributes);
 
     /**
-     * Insert a new entity into the table.
-     * @param entity
-     * @return
+     * Inserts an Entity object into the database
+     * @return a boolean determining whether the Entity has been added to the database
      */
     default public boolean InsertEntity(){
         throw new UnsupportedOperationException();
     }
 
     /**
-     * Delete an entity from the table.
-     * @param entity
-     * @return
+     * Deletes an Entity object from the database
+     * @return a boolean determining whether the Entity has been deleted from the database
      */
     default public boolean DeleteEntity(){
         throw new UnsupportedOperationException();
     }
 
     /**
-     * Update an entity for a given EntityClasses.EntityType.
-     * @param oldEntity,newEntity
-     * @return
+     * Modifies the attributes of an Entity object in the database
+     * @return a boolean determining whether the attributes for the Entity has been updated in the database
      */
     default public boolean UpdateEntity(){
         throw new UnsupportedOperationException();

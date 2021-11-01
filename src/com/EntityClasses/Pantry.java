@@ -16,15 +16,87 @@ public class Pantry implements EntityType<Pantry>{
     private String aisle;
     private int quantityBought;
     private int currentQuantity;
-
     private final DBInterface db;
-
     private Map<String, Object> attributes;
 
+    /**
+     * Constructor for instantiating a Pantry object for an Ingredient and a User, where the ingredient's name and the User's username has not been determined by the table yet.
+     */
     public Pantry(DBInterface db){
         this.db = db;
     }
 
+    public String getAisle() {
+        return aisle;
+    }
+
+    public int getCurrentQuantity() {
+        return currentQuantity;
+    }
+
+    public DBInterface getDb() {
+        return db;
+    }
+
+    public LocalDate getExpirationDate() {
+        return expirationDate;
+    }
+
+    public String getIngredientName() {
+        return ingredientName;
+    }
+
+    public LocalDateTime getPurchaseDate() {
+        return purchaseDate;
+    }
+
+    public int getQuantityBought() {
+        return quantityBought;
+    }
+
+    public String getUsername() {
+        return username;
+    }
+
+    public void setAisle(String aisle) {
+        this.aisle = aisle;
+    }
+
+    public void setCurrentQuantity(int currentQuantity) {
+        this.currentQuantity = currentQuantity;
+    }
+
+    public void setExpirationDate(LocalDate expirationDate) {
+        this.expirationDate = expirationDate;
+    }
+
+    public void setIngredientName(String ingredientName) {
+        this.ingredientName = ingredientName;
+    }
+
+    public void setPurchaseDate(LocalDateTime purchaseDate) {
+        this.purchaseDate = purchaseDate;
+    }
+
+    public void setQuantityBought(int quantityBought) {
+        this.quantityBought = quantityBought;
+    }
+
+    public void setUsername(String username) {
+        this.username = username;
+    }
+
+    /**
+     * Duplicates an instance of a Pantry
+     * @return the new object of the Pantry
+     */
+    public Pantry copyPantry(){
+        Pantry p = new Pantry(db);
+        p.configEntity(attributes);
+        return p;
+    }
+
+    // Set the attributes for the Pantry object
     @Override
     public void configEntity(Map<String, Object> attributes) {
         this.username = (String) Objects.requireNonNull(attributes.get("username"));
@@ -37,58 +109,7 @@ public class Pantry implements EntityType<Pantry>{
         this.attributes = attributes;
     }
 
-    public String getAisle() {
-        return aisle;
-    }
-    public int getCurrentQuantity() {
-        return currentQuantity;
-    }
-    public DBInterface getDb() {
-        return db;
-    }
-    public LocalDate getExpirationDate() {
-        return expirationDate;
-    }
-    public String getIngredientName() {
-        return ingredientName;
-    }
-    public LocalDateTime getPurchaseDate() {
-        return purchaseDate;
-    }
-    public int getQuantityBought() {
-        return quantityBought;
-    }
-    public String getUsername() {
-        return username;
-    }
-    public void setAisle(String aisle) {
-        this.aisle = aisle;
-    }
-    public void setCurrentQuantity(int currentQuantity) {
-        this.currentQuantity = currentQuantity;
-    }
-    public void setExpirationDate(LocalDate expirationDate) {
-        this.expirationDate = expirationDate;
-    } 
-    public void setIngredientName(String ingredientName) {
-        this.ingredientName = ingredientName;
-    }
-    public void setPurchaseDate(LocalDateTime purchaseDate) {
-        this.purchaseDate = purchaseDate;
-    }
-    public void setQuantityBought(int quantityBought) {
-        this.quantityBought = quantityBought;
-    }
-    public void setUsername(String username) {
-        this.username = username;
-    }
-
-    public Pantry copyPantry(){
-        Pantry p = new Pantry(db);
-        p.configEntity(attributes);
-        return p;
-    }
-
+    // Inserts an ingredient for the User into the database
     @Override
     public boolean InsertEntity(){
         String sql = "insert into \"PutsIntoPantry\" values(?, ?, ?, ?, ?, ?, ?)";
@@ -111,10 +132,23 @@ public class Pantry implements EntityType<Pantry>{
         }
     }
 
+    // Deletes an Ingredient from the database
+    @Override
+    public boolean DeleteEntity(){
+        String sql = "delete from \"PutsIntoPantry\" where \"username\" = ? and \"ingredientname\" = ? and \"expirationdate\" = ?";
+        PreparedStatement stmt = db.getPreparedStatement(sql);
+        try{
+            stmt.setString(1, this.username);
+            stmt.setString(2, this.ingredientName);
+            stmt.setObject(3, expirationDate);
+            db.execStatementUpdate(stmt);
+        }catch (SQLException e){
+            return false;
+        }
+        return true;
+    }
 
-    /**
-     * This method is to be called with a new object.
-     */
+    // Modifies the attributes of an Ingredient in the database
     @Override
     public boolean UpdateEntity(){
         String sql = "update \"PutsIntoPantry\" set \"aisle\" = ?, \"quantitybought\" = ?, \"currentquantity\" = ?" +
@@ -137,18 +171,5 @@ public class Pantry implements EntityType<Pantry>{
         }
     }
 
-    @Override
-    public boolean DeleteEntity(){
-        String sql = "delete from \"PutsIntoPantry\" where \"username\" = ? and \"ingredientname\" = ? and \"expirationdate\" = ?";
-        PreparedStatement stmt = db.getPreparedStatement(sql);
-        try{
-            stmt.setString(1, this.username);
-            stmt.setString(2, this.ingredientName);
-            stmt.setObject(3, expirationDate);
-            db.execStatementUpdate(stmt);
-        }catch (SQLException e){
-            return false;
-        }
-        return true;
-    }
+
 }
