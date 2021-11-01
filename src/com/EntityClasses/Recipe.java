@@ -198,12 +198,36 @@ public class Recipe implements EntityType<Recipe>{
 
     @Override
     public boolean DeleteEntity() {
-        return false;
+        PreparedStatement stmt = db.getPreparedStatement("Delete from \"Recipe\" where \"RecipeID\" = ?");
+        try {
+            stmt.setInt(1, this.recipeID);
+            db.execStatementUpdate(stmt);
+            stmt.close();
+            return true;
+        }catch(SQLException e) {
+            System.err.println("Failed to delete recipe");
+            return false;
+        }
     }
 
     @Override
     public boolean UpdateEntity() {
-        return false;
+        String sql = "Update \"Recipe\" Set \"RecipeName\" = ?, \"Steps\" = ?, \"Description\" = ?, \"Servings\" = ?, \"CookTime\", \"Difficulty\"";
+        PreparedStatement stmt = db.getPreparedStatement(sql);
+        try {
+            stmt.setString(2, steps);
+            stmt.setString(3, description);
+            stmt.setInt(4, servings);
+            stmt.setInt(5, cookTime);
+            stmt.setString(1, recipeName);
+            stmt.setInt(6, difficulty.ordinal());
+            db.execStatementUpdate(stmt);
+            stmt.close();
+            return true;
+        } catch (SQLException e) {
+            System.err.println("Could not update recipe.");
+            return false;
+        }
     }
 
     @Override
