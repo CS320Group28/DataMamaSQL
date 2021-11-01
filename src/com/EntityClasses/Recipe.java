@@ -244,7 +244,11 @@ public class Recipe implements EntityType<Recipe>{
 
     @Override
     public String toString() {
-        return String.format("Name: %s \n\tID: %s \n\tDescription: %s\n", this.recipeName, this.recipeID, this.description);
+        return String.format("Name: %s \n\tID: %s \n\tDescription: %s\nDifficulty: %s", this.recipeName, this.recipeID, this.description, this.difficulty.toString());
+    }
+
+    public String recipeRepresentation(){
+        return String.format("%s\tCook Time: %s\n\t Servings: %s\n STEPS\n%s", toString(),cookTime, servings, steps);
     }
 
 }
