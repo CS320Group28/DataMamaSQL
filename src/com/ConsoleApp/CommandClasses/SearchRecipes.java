@@ -260,5 +260,15 @@ public class SearchRecipes {
             System.out.println(" CreationDate: " + creationDate);
         }
     }
-
+    private static void searchByIngredient(DBInterface db) throws SQLException{
+        System.out.print("Enter a ingredient to search for: ");
+        String ingredient = scan.nextLine().strip();
+        String sql = "SELECT * FROM \"Recipe\" INNER JOIN \"Requires\" ON \"Recipe\".\"RecipeID\" = \"Requires\".\"recipeid\" where \"Requires\".\"ingredientname\" = ?";
+        PreparedStatement stmt = db.getPreparedStatement(sql);
+        stmt.setString(1, ingredient);
+        ResultSet rs = db.execStatementQuery(stmt);
+        formatRS(rs);
+        stmt.close();
+    }
 }
+
