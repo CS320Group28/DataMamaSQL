@@ -5,7 +5,6 @@ import com.DBInterface;
 import java.sql.PreparedStatement;
 import java.sql.SQLException;
 import java.time.LocalDate;
-import java.time.LocalDateTime;
 import java.util.Map;
 
 public class Makes implements EntityType<Makes>{

@@ -2,7 +2,6 @@ package com.EntityClasses;
 
 import java.util.Map;
 
-import com.DBInterface;
 
 public interface EntityType<T> {
     /**

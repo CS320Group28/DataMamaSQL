@@ -1,8 +1,6 @@
 package com.ConsoleApp;
 import java.sql.SQLException;
-import java.sql.SQLOutput;
 import java.util.ArrayList;
-import java.util.Locale;
 import java.util.Scanner;
 
 import com.*;
@@ -28,7 +26,6 @@ public class DriverApplication {
         int rSort;
         boolean logged = false;
         boolean running = true;
-        Scanner scan = new Scanner(System.in);
         System.out.println("Welcome to the Recipe App!");
 
         while (running) {
@@ -250,15 +247,16 @@ public class DriverApplication {
                         System.err.println(e.getMessage());
                         System.out.println("Enter the number of the list item.");
                     }
+                    
                 }
             }
         }
-        //if the program is ending execution, close the scanner and the connection to the database
         scan.close();
         try {
             db.endSSH();
         } catch (SQLException e) {
             System.out.println(e.getMessage());
         }
+        //if the program is ending execution, close the scanner and the connection to the database
     }
 }

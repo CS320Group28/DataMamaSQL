@@ -5,10 +5,9 @@ import com.DBInterface;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
-import java.sql.Statement;
 import java.util.Map;
 
-public class Authors implements EntityType{
+public class Authors implements EntityType<Authors>{
     private String username;
     private int recipeID;
     private DBInterface db;
@@ -38,7 +37,7 @@ public class Authors implements EntityType{
 
     // Set the attributes for the Authors object
     @Override
-    public void configEntity(Map attributes) {
+    public void configEntity(Map<String, Object> attributes) {
         this.username = (String) attributes.get("username");
         this.recipeID = (int) attributes.get("recipeid");
     }
