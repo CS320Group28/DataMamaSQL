@@ -161,7 +161,9 @@ public class SearchRecipes {
 
         try{
             System.out.printf("Searching database for %s...\n", category);
-            String sql = String.format("select * from \"Recipe\" inner join \"Category\" on \"Category\".\"recipeid = \"Recipe\".\"recipeid\" where lower(\"CategoryName\" like '%%%s%%' order by \"Category\".\"CategoryName\"",category.toLowerCase());
+            String sql = String.format("select * from \"Recipe\" inner join \"Authors\" on \"RecipeID\" = \"recipeid\" inner join (\"HasCategory\" inner join \"Category\" on \"categoryid\" = \"CategoryID\")\n" +
+                    "            on \"HasCategory\".\"recipeid\" = \"Recipe\".\"RecipeID\"\n" +
+                    "                where lower(\"Category\".\"CategoryName\") like '%%%s%%' order by \"Recipe\".\"RecipeName\" asc",category.toLowerCase() );
             Statement stmt = db.getStatement();
             formatRS(stmt.executeQuery(sql));
             stmt.close();
@@ -277,10 +279,10 @@ public class SearchRecipes {
             System.out.println(" CreationDate: " + creationDate);
         }
     }
-    private static void searchByIngredient(DBInterface db) throws SQLException{
+    private static void SearchByIngredientCLI(DBInterface db) throws SQLException{
         System.out.print("Enter a ingredient to search for: ");
         String ingredient = scan.nextLine().strip();
-        String sql = "SELECT * FROM \"Recipe\" INNER JOIN \"Requires\" ON \"Recipe\".\"RecipeID\" = \"Requires\".\"recipeid\" where \"Requires\".\"ingredientname\" = ?";
+        String sql = "SELECT * FROM \"Recipe\" INNER JOIN \"Requires\" ON \"Recipe\".\"RecipeID\" = \"Requires\".\"recipeid\" INNER JOIN \"Authors\" ON \"Recipe\".\"RecipeID\" = \"Authors\".recipeid where \"Requires\".\"ingredientname\" = ?";
         PreparedStatement stmt = db.getPreparedStatement(sql);
         stmt.setString(1, ingredient);
         ResultSet rs = db.execStatementQuery(stmt);
@@ -291,7 +293,9 @@ public class SearchRecipes {
     public static void main(String[] args) {
         DBInterface db = new DBInterface();
         SearchByCategoryCLI(db);
+
         try{
+            SearchByIngredientCLI(db);
             db.endSSH();
         }
         catch(SQLException e){
