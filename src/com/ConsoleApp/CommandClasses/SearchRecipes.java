@@ -155,13 +155,16 @@ public class SearchRecipes {
 
     }
 
-    public static void SearchByCategory(DBInterface db){
+    public static void SearchByCategoryCLI(DBInterface db){
         System.out.println("Enter a category to search: ");
         String category = scan.nextLine();
 
         try{
             System.out.printf("Searching database for %s...\n", category);
-            //String sql = String.format("select * from \"Recipe\" inner join \"Category\" on \"Category.recipeid = " )
+            String sql = String.format("select * from \"Recipe\" inner join \"Category\" on \"Category\".\"recipeid = \"Recipe\".\"recipeid\" where lower(\"CategoryName\" like '%%%s%%' order by \"Category\".\"CategoryName\"",category.toLowerCase());
+            Statement stmt = db.getStatement();
+            formatRS(stmt.executeQuery(sql));
+            stmt.close();
         }
         catch(SQLException e){
             System.out.println(e.getMessage());
@@ -272,6 +275,17 @@ public class SearchRecipes {
             System.out.print(" Rating: " + String.format("%1$-4s", rating));
             System.out.print(" Created By: " + String.format("%1$-32s", author));
             System.out.println(" CreationDate: " + creationDate);
+        }
+    }
+
+    public static void main(String[] args) {
+        DBInterface db = new DBInterface();
+        SearchByCategoryCLI(db);
+        try{
+            db.endSSH();
+        }
+        catch(SQLException e){
+            System.out.println(e.getMessage());
         }
     }
 
