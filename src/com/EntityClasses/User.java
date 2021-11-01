@@ -15,23 +15,23 @@ public class User implements EntityType<User>{
     private LocalDateTime lastAccessDate;
     private DBInterface db;
 
+    /**
+     * Constructor for instantiating a User object for user, where the user's name has not been determined by the table yet.
+     */
     public User(DBInterface db){
         this.db = db;
     }
 
+    /**
+     * Constructor for instantiating a User object for a user from the database, where the user's username already exists.
+     */
     public User(String un, String pw, LocalDateTime cd, LocalDateTime ld){
         this.username = un;
         this.password = pw;
         this.creationDate = cd;
         this.lastAccessDate = ld;
     }
-    @Override
-    public void configEntity(Map<String, Object> attributes) {
-        this.username = (String) attributes.get("Username");
-        this.password = (String) attributes.get("Password");
-        this.creationDate = LocalDateTime.now();
-        lastAccessDate = creationDate;        
-    }
+
 
     public void setUserName(String username){
         this.username = username;
@@ -65,6 +65,16 @@ public class User implements EntityType<User>{
         return this.lastAccessDate;
     }
 
+    // Set the attributes for the User object
+    @Override
+    public void configEntity(Map<String, Object> attributes) {
+        this.username = (String) attributes.get("Username");
+        this.password = (String) attributes.get("Password");
+        this.creationDate = LocalDateTime.now();
+        lastAccessDate = creationDate;
+    }
+
+    // Inserts a User into the database
     @Override
     public boolean InsertEntity() {
         PreparedStatement stmt = db.getPreparedStatement("INSERT INTO \"User\"(Username, userPassword, creationDate, lastAccessDate) VALUES(?, ?, ?, ?)");
@@ -80,11 +90,14 @@ public class User implements EntityType<User>{
         return true;
     }
 
+    // Deletes a User from the database
     @Override
     public boolean DeleteEntity() {
         return false;
     }
 
+    // Modifies the attributes of a User in the database
+    @Override
     public boolean UpdateEntity() {
         PreparedStatement stmt = db.getPreparedStatement("UPDATE \"User\" SET \"username\" = ?, " +
                                                         "\"lastaccessdate\" = ?, \"userpassword\" = ?, \"creationdate\" = ?" +
@@ -102,10 +115,8 @@ public class User implements EntityType<User>{
             return false;
         }
         return true;
-
-
-
     }
+
     public static void main(String[] args) {
         Map<String, Object> userMap = new HashMap<>();
         userMap.put("Username", "username");

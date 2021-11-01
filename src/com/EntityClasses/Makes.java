@@ -14,10 +14,15 @@ public class Makes implements EntityType<Makes>{
     private double quantityMade;
     private LocalDate dateMade;
     private DBInterface db;
+
+    /**
+     * Constructor for instantiating a Makes relation object for a Recipe and a User, where the recipe's recipe ID and the User's username has not been determined by the table yet.
+     */
     public Makes(DBInterface db){
         this.db = db;
     }
 
+    // Set the attributes for the Makes relation object
     @Override
     public void configEntity(Map<String, Object> attributes) {
         this.recipeID = (int)attributes.get("recipeid");
@@ -26,6 +31,7 @@ public class Makes implements EntityType<Makes>{
         this.quantityMade = (double)attributes.get("quantitymade");
     }
 
+    // Inserts a Makes relation into the database
     @Override
     public boolean InsertEntity() {
         String sql = "Insert into \"Makes\" values(?, ?, ?, ?)";
@@ -44,6 +50,7 @@ public class Makes implements EntityType<Makes>{
         return true;
     }
 
+    // Modifies the attributes of a Makes relation in the database
     @Override
     public boolean UpdateEntity() {
         String sql = "Update \"Makes\" set \"recipeid\" = ?, \"username\" = ?, \"quantitymade\" = \"quantitymade\" + ?, \"datemade\" = ?";
@@ -59,5 +66,6 @@ public class Makes implements EntityType<Makes>{
             System.err.println("Failed to make recipe.");
             return false;
         }
-        return true;    }
+        return true;
+    }
 }

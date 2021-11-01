@@ -27,17 +27,18 @@ public class Recipe implements EntityType<Recipe>{
     private int cookTime;
     private Difficulty difficulty;
     private LocalDateTime creationDate;
-
     private DBInterface db;
-    //region Constructors
 
+    /**
+     * Constructor for instantiating a Recipe object for a recipe, where the recipe's recipe ID has not been determined by the table yet.
+     */
     public Recipe(DBInterface db){
         this.db = db;
     }
 
-    //for making a new recipe, where the recipe ID has not been determined by the table yet.
-
-
+    /**
+     * Constructor for instantiating a Recipe object for a recipe from the database, where the recipe's recipe ID already exists.
+     */
     public Recipe(int recipeID, String recipeName, String steps, String description, int servings, int cookTime, Difficulty difficulty, DBInterface db) {
         this.recipeID = recipeID;
         this.recipeName = recipeName;
@@ -48,66 +49,6 @@ public class Recipe implements EntityType<Recipe>{
         this.difficulty = difficulty;
         this.db = db;
     }
-
-    /**
-    public Recipe(String recipeName, String steps, int rating, String description, float servings, int cookTime, int difficulty, LocalDateTime creationDate){
-        Objects.requireNonNull(recipeName, "Recipe Name must not be null");
-        Objects.requireNonNull(steps, "steps must not be null");
-        Objects.requireNonNull(creationDate, "creation date must not be null");
-        if(difficulty < 0 || difficulty > 4)
-            throw new IndexOutOfBoundsException();
-
-        this.recipeID = 0;
-        this.recipeName = recipeName;
-        this.cookTime = cookTime;
-        this.steps = steps;
-        this.rating = rating;
-        this.description = description;
-        this.servings = servings;
-        this.difficulty = Difficulty.values()[difficulty];
-        this.creationDate = creationDate;
-    }
-
-    //for instantiating a recipe from the database, where the recipe ID already exists.
-    public Recipe(int recipeID, String recipeName, String steps, int rating, String description, float servings, int cookTime, int difficulty, LocalDateTime creationDate){
-        Objects.requireNonNull(recipeName, "Recipe Name must not be null");
-        Objects.requireNonNull(steps, "steps must not be null");
-        Objects.requireNonNull(creationDate, "creation date must not be null");
-        if(difficulty < 0 || difficulty > 4)
-            throw new IndexOutOfBoundsException();
-
-        this.recipeID = recipeID;
-        this.recipeName = recipeName;
-        this.cookTime = cookTime;
-        this.steps = steps;
-        this.rating = rating;
-        this.description = description;
-        this.servings = servings;
-        this.difficulty = Difficulty.values()[difficulty];
-        this.creationDate = creationDate;
-    }
-    /*
-
-
-    /**
-     * TODO: MAKE THIS ACTUALLY DO THINGS
-     */
-    @Override
-    public void configEntity(Map<String, Object> attributes) {
-        int difficulty = (int) attributes.get("difficulty");
-        if(difficulty < 1 || difficulty > 5)
-            throw new IndexOutOfBoundsException();
-        this.difficulty = Difficulty.values()[difficulty-1];
-        this.recipeName = (String) attributes.get("recipename");
-        this.cookTime = (int) attributes.get("cooktime");
-        this.steps = (String) attributes.get("steps");
-        this.servings = (int) attributes.get("servings");
-        this.description = (String) attributes.get("description");
-        this.creationDate = LocalDateTime.now();
-    }
-    //endregion
-
-    //region Getters and Setters
 
     public int getRecipeID() {
         return recipeID;
@@ -180,9 +121,23 @@ public class Recipe implements EntityType<Recipe>{
     public void setCreationDate(LocalDateTime creationDate) {
         this.creationDate = creationDate;
     }
-    //endregion
 
-    //used for creating the recipe / inserting into the database
+    // Set the attributes for the Recipe object
+    @Override
+    public void configEntity(Map<String, Object> attributes) {
+        int difficulty = (int) attributes.get("difficulty");
+        if(difficulty < 1 || difficulty > 5)
+            throw new IndexOutOfBoundsException();
+        this.difficulty = Difficulty.values()[difficulty-1];
+        this.recipeName = (String) attributes.get("recipename");
+        this.cookTime = (int) attributes.get("cooktime");
+        this.steps = (String) attributes.get("steps");
+        this.servings = (int) attributes.get("servings");
+        this.description = (String) attributes.get("description");
+        this.creationDate = LocalDateTime.now();
+    }
+
+    // Inserts a Recipe into the database
     @Override
     public boolean InsertEntity() {
         PreparedStatement stmt = db.getPreparedStatement(
@@ -199,15 +154,13 @@ public class Recipe implements EntityType<Recipe>{
             stmt.setObject(7, this.creationDate);
 
             db.execStatementUpdate(stmt);
-
         } catch (SQLException e) {
             System.out.println(e.getMessage());
         }
-
-
         return false;
     }
 
+    // Deletes a Recipe from the database
     @Override
     public boolean DeleteEntity() {
         PreparedStatement stmt = db.getPreparedStatement("Delete from \"Recipe\" where \"RecipeID\" = ?");
@@ -222,6 +175,7 @@ public class Recipe implements EntityType<Recipe>{
         }
     }
 
+    // Modifies the attributes of a Recipe in the database
     @Override
     public boolean UpdateEntity() {
         String sql = "Update \"Recipe\" Set \"RecipeName\" = ?, \"Steps\" = ?, \"Description\" = ?, \"Servings\" = ?, \"CookTime\" = ?, \"Difficulty\" = ? WHERE \"RecipeID\" = ?";
