@@ -155,6 +155,23 @@ public class SearchRecipes {
 
     }
 
+    public static void SearchByCategoryCLI(DBInterface db){
+        System.out.println("Enter a category to search: ");
+        String category = scan.nextLine();
+
+        try{
+            System.out.printf("Searching database for %s...\n", category);
+            String sql = String.format("select * from \"Recipe\" inner join \"Category\" on \"Category\".\"recipeid = \"Recipe\".\"recipeid\" where lower(\"CategoryName\" like '%%%s%%' order by \"Category\".\"CategoryName\"",category.toLowerCase());
+            Statement stmt = db.getStatement();
+            formatRS(stmt.executeQuery(sql));
+            stmt.close();
+        }
+        catch(SQLException e){
+            System.out.println(e.getMessage());
+            e.printStackTrace();
+        }
+    }
+
     public static void SearchByName(DBInterface db){
         System.out.print("Enter a name to search: ");
         String name = scan.nextLine();
@@ -252,7 +269,7 @@ public class SearchRecipes {
             if(author == null){
                 author = "Unknown Author";
             }
-            System.out.print("RecipeName: " + String.format("%1$-32s", recipeName)); // 1$ indicates the first argument of the string
+            System.out.print("RecipeName: " + String.format("RecipeName: %1$-32s", recipeName)); // 1$ indicates the first argument of the string
                                                                                      // -32 indicates a right padded string of 32 characters
             System.out.print(" ID: " + String.format("%1$-6d", recipeID));
             System.out.print(" Rating: " + String.format("%1$-4s", rating));
@@ -270,5 +287,17 @@ public class SearchRecipes {
         formatRS(rs);
         stmt.close();
     }
+
+    public static void main(String[] args) {
+        DBInterface db = new DBInterface();
+        SearchByCategoryCLI(db);
+        try{
+            db.endSSH();
+        }
+        catch(SQLException e){
+            System.out.println(e.getMessage());
+        }
+    }
+
 }
 
