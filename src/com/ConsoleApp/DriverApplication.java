@@ -179,7 +179,9 @@ public class DriverApplication {
 
                                 //list of recipes to either edit or delete
                                 ArrayList<Recipe> recipes = RecipeListForDeleteOrEdit.getRecipes(db, user);
-
+                                if(recipes.size() <= 0){
+                                    continue;
+                                }
                                 //print the recipes from the list
                                 for(int i = 0; i < recipes.size(); i++){
                                     System.out.println(i+1 + ".) " + recipes.get(i));
