@@ -107,7 +107,7 @@ public class DriverApplication {
                                         break;
                                     case 4:
                                         System.out.println("preparing search by name...");
-                                        SearchRecipes.SearchByName(db);
+                                        SearchRecipes.SearchByNameCLI(db);
                                         break;
                                     case 5:
                                         System.out.println("prepared search by id...");
@@ -128,7 +128,9 @@ public class DriverApplication {
                                 System.out.println("\t2. Sort by rating");
                                 System.out.println("\t3. Sort by most recent");
                                 System.out.println("\t4. Search for recipes by name");
-                                System.out.println("\t5. Make a recipe by ID");
+                                System.out.println("\t5. Search for recipes by ingredient");
+                                System.out.println("\t6. Search for recipes by category");
+                                System.out.println("\t7. Make a recipe by ID");
                                 System.out.print(">> ");
                                 rSort = scan.nextInt();
                                 //this switch acts on the cases for the rSort value which will be an integer
@@ -151,9 +153,17 @@ public class DriverApplication {
                                         break;
                                     case 4:
                                         System.out.println("preparing search by name...");
-                                        SearchRecipes.SearchByName(db);
+                                        SearchRecipes.SearchByNameCLI(db);
                                         break;
                                     case 5:
+                                        System.out.println("preparing search by ingredient...");
+                                        SearchRecipes.SearchByIngredientCLI(db);
+                                        break;
+                                    case 6:
+                                        System.out.println("preparing search by category...");
+                                        SearchRecipes.SearchByCategoryCLI(db);
+                                        break;
+                                    case 7:
                                         System.out.println("prepared search by id...");
                                         Recipe recipe = SearchRecipes.SelectByID(db);
                                         System.out.println(recipe);

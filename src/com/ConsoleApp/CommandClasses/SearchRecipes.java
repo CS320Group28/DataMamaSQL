@@ -169,7 +169,7 @@ public class SearchRecipes {
         }
     }
 
-    public static void SearchByName(DBInterface db){
+    public static void SearchByNameCLI(DBInterface db){
         System.out.print("Enter a name to search: ");
         String name = scan.nextLine();
         
@@ -274,7 +274,7 @@ public class SearchRecipes {
             System.out.println(" CreationDate: " + creationDate);
         }
     }
-    private static void SearchByIngredientCLI(DBInterface db) throws SQLException{
+    public static void SearchByIngredientCLI(DBInterface db) throws SQLException{
         System.out.print("Enter a ingredient to search for: ");
         String ingredient = scan.nextLine().strip();
         String sql = "SELECT * FROM \"Recipe\" INNER JOIN \"Requires\" ON \"Recipe\".\"RecipeID\" = \"Requires\".\"recipeid\" INNER JOIN \"Authors\" ON \"Recipe\".\"RecipeID\" = \"Authors\".recipeid where \"Requires\".\"ingredientname\" = ?";
@@ -284,7 +284,7 @@ public class SearchRecipes {
         formatRS(rs);
         stmt.close();
     }
-
+/*
     public static void main(String[] args) {
         DBInterface db = new DBInterface();
         SearchByCategoryCLI(db);
@@ -297,6 +297,8 @@ public class SearchRecipes {
             System.out.println(e.getMessage());
         }
     }
+
+ */
 
 }
 
