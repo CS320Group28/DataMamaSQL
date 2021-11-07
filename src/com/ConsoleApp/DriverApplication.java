@@ -56,6 +56,7 @@ public class DriverApplication {
                     System.out.println("\t4. Add ingedients to your pantry");
                     System.out.println("\t5. Make a recipe");
                     System.out.println("\t6. Edit or Delete Recipe");
+                    System.out.println("\t7. Rate a recipe.");
                     System.out.println("\t99. Logout");
                     System.out.println("\t100. Exit");
 
@@ -231,6 +232,10 @@ public class DriverApplication {
                                     }
                                 }
 
+                                break;
+                            case 7:
+                                Recipe chosen = SearchRecipes.SelectByID(db);
+                                RateRecipes.rateRecipeCLI(db, chosen);
                                 break;
                             //logout case
                             case 99:
