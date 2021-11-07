@@ -29,7 +29,7 @@ public class RateRecipes {
         int rating = 0;
 
         while(true){
-            System.out.print("Give a rating between 1 and 5: ");
+            System.out.print("Give a rating between 0 and 5: ");
             try{
                 rating = scan.nextInt();
             }catch(InputMismatchException e){
@@ -37,7 +37,7 @@ public class RateRecipes {
                 System.err.println("What you entered was not an integer");
                 continue;
             }
-            if(rating < 1 || rating > 5){
+            if(rating < 0 || rating > 5){
                 System.out.println("Out of range rating");
                 continue;
             }
