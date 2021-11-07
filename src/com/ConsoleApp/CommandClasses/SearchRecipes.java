@@ -11,11 +11,18 @@ import java.sql.Statement;
 import java.time.LocalDateTime;
 import java.util.*;
 
-
+/**
+ * Class containing static methods for CLI's pertaining to ordering and selecting recipes.
+ */
 public class SearchRecipes {
 
     private static final Scanner scan = new Scanner(System.in);
     private static int ad;
+
+    /**
+     * CLI for sorting recipes by name lexicographically
+     * @param db DBInterface instance
+     */
     public static void SortByNameCLI(DBInterface db){
         System.out.println("Sort by...");
         System.out.println("\t1. Alphabetical");
@@ -59,6 +66,10 @@ public class SearchRecipes {
         }
     }
 
+    /**
+     * CLI for showing all recipes sorted by rating.
+     * @param db DBInterface instance
+     */
     public static void SortByRatingCLI(DBInterface db){
         System.out.println("Sort by...");
         System.out.println("\t1. Lowest Rated");
@@ -104,6 +115,10 @@ public class SearchRecipes {
 
     }
 
+    /**
+     * CLI for printing all recipes sorted by creationdate
+     * @param db DBInterface instance
+     */
     public static void SortByRecentCLI(DBInterface db){
         System.out.println("Sort by...");
         System.out.println("\t1. Oldest");
@@ -150,6 +165,10 @@ public class SearchRecipes {
 
     }
 
+    /**
+     * CLI for showing recipes of a specific category
+     * @param db DBInterface instance
+     */
     public static void SearchByCategoryCLI(DBInterface db){
         System.out.println("Enter a category to search: ");
         String category = scan.nextLine();
@@ -169,6 +188,10 @@ public class SearchRecipes {
         }
     }
 
+    /**
+     * CLI for searching for recipes by name.
+     * @param db DBInterface instance
+     */
     public static void SearchByNameCLI(DBInterface db){
         System.out.print("Enter a name to search: ");
         String name = scan.nextLine();
@@ -185,6 +208,11 @@ public class SearchRecipes {
         }
     }
 
+    /**
+     * Select a recipe by a RecipeID
+     * @param db DBInterface instance
+     * @returns Recipe object with required data about the recipe.
+     */
     public static Recipe SelectByID(DBInterface db){
         Integer id = null;
         while(id == null){
@@ -243,7 +271,6 @@ public class SearchRecipes {
     }
 
 
-
     /***
      * a simple helper function that prints the ResultSet obtained by sorting the recipes in the proper format.
      * @param rs
@@ -274,6 +301,12 @@ public class SearchRecipes {
             System.out.println(" CreationDate: " + creationDate);
         }
     }
+
+    /**
+     * CLI for selecting recipes containing a specific ingredient.
+     * @param db DBInterface
+     * @throws SQLException
+     */
     public static void SearchByIngredientCLI(DBInterface db) throws SQLException{
         System.out.print("Enter a ingredient to search for: ");
         String ingredient = scan.nextLine().strip();
@@ -284,21 +317,39 @@ public class SearchRecipes {
         formatRS(rs);
         stmt.close();
     }
-/*
-    public static void main(String[] args) {
-        DBInterface db = new DBInterface();
-        SearchByCategoryCLI(db);
 
-        try{
-            SearchByIngredientCLI(db);
-            db.endSSH();
+    /**
+     * Print out the 50 highest rated recipes in a pretty format
+     * @param db DBInterface instance
+     * @throws SQLException
+     */
+    public static void topFiftyRecipes(DBInterface db) throws SQLException{
+        System.out.println("Grabbing highest rated recipes...");
+        String sql = "SELECT * FROM \"Recipe\" INNER JOIN \"Authors\" ON \"Authors\".\"recipeid\" = \"Recipe\".\"RecipeID\" ORDER BY \"Recipe\".\"Rating\" DESC";
+        Statement stmt = db.getStatement();
+        ResultSet rs = stmt.executeQuery(sql);
+
+        for (int i = 0; i < 50; i++){
+            if(rs.next()){
+                int rid = rs.getInt("RecipeID");
+                String recipeName = rs.getString("RecipeName");
+                String rating =  rs.getString("Rating");
+                String creationDate = rs.getString("CreationDate");
+                String author = rs.getString("username");
+    
+                if(author == null){
+                    author = "Unknown Author";
+                }
+                System.out.print("RecipeName: " + String.format("RecipeName: %1$-32s", recipeName)); // 1$ indicates the first argument of the string
+                                                                                         // -32 indicates a right padded string of 32 characters
+                System.out.print(" ID: " + String.format("%1$-6d", rid));
+                System.out.print(" Rating: " + String.format("%1$-4s", rating));
+                System.out.print(" Created By: " + String.format("%1$-32s", author));
+                System.out.println(" CreationDate: " + creationDate);
+            }
         }
-        catch(SQLException e){
-            System.out.println(e.getMessage());
-        }
+        stmt.close();
     }
-
- */
 
 }
 

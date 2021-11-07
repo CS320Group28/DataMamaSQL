@@ -85,7 +85,8 @@ public class DriverApplication {
                                 System.out.println("\t2. Sort by rating");
                                 System.out.println("\t3. Sort by most recent");
                                 System.out.println("\t4. Search for recipes by name");
-                                System.out.println("\t5. Select a recipe by ID");
+                                System.out.println("\t5. See top 50 highest rated recipes");
+                                System.out.println("\t6. Select a recipe by ID");
                                 System.out.print(">> ");
                                 rSort = scan.nextInt();
                                 //this switch acts on the cases for the rSort value which will be an integer
@@ -111,6 +112,9 @@ public class DriverApplication {
                                         SearchRecipes.SearchByNameCLI(db);
                                         break;
                                     case 5:
+                                        SearchRecipes.topFiftyRecipes(db);
+                                        break;
+                                    case 6:
                                         System.out.println("prepared search by id...");
                                         SearchRecipes.SelectByID(db);
                                         break;
