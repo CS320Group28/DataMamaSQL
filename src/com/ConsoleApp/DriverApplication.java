@@ -235,7 +235,7 @@ public class DriverApplication {
                                 break;
                             case 7:
                                 Recipe chosen = SearchRecipes.SelectByID(db);
-                                RateRecipes.rateRecipeCLI(db, chosen);
+                                RateRecipes.rateRecipeCLI(db, chosen, user);
                                 break;
                             //logout case
                             case 99:
