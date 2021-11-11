@@ -44,7 +44,7 @@ public class RateRecipes {
             break;
         }
         ResultSet rslookup = db.getStatement()
-                               .executeQuery(String.format("SELECT \"username\" FROM \"Ratings\" WHERE \"username\" = '%s'", user.getUserName()));
+                               .executeQuery(String.format("SELECT \"username\" FROM \"Ratings\" WHERE \"username\" = '%s' AND \"recipeid\" = %d", user.getUserName(), rid));
         if(rslookup.next()){
             System.out.println("You have already rated this recipe");
             rslookup.close();
@@ -59,6 +59,8 @@ public class RateRecipes {
         stmt.setInt(3, rating);
         db.execStatementUpdate(stmt);
 
+        PreparedStatement proc = db.getPreparedStatement("call updaterating( ? )");
+        proc.setInt(1, rid);
+        proc.close();
     }
-    
 }
