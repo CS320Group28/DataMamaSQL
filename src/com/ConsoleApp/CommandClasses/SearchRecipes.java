@@ -351,5 +351,38 @@ public class SearchRecipes {
         stmt.close();
     }
 
+    /**
+     * Get the fifty newest recipes and print them out
+     * @param db DBinterface instance
+     * @throws SQLException
+     */
+    public static void topFiftyNewestRecipes(DBInterface db) throws SQLException{
+        System.out.println("Grabbing the newest recipes...");
+        String sql = "SELECT * FROM \"Recipe\" INNER JOIN \"Authors\" ON \"Authors\".\"recipeid\" = \"Recipe\".\"RecipeID\" ORDER BY \"Recipe\".\"CreationDate\" DESC";
+    
+        Statement stmt = db.getStatement();
+        ResultSet rs = stmt.executeQuery(sql);
+
+        for (int i = 0; i < 50; i++){
+            if(rs.next()){
+                int rid = rs.getInt("RecipeID");
+                String recipeName = rs.getString("RecipeName");
+                String rating =  rs.getString("Rating");
+                String creationDate = rs.getString("CreationDate");
+                String author = rs.getString("username");
+    
+                if(author == null){
+                    author = "Unknown Author";
+                }
+                System.out.print("RecipeName: " + String.format("RecipeName: %1$-32s", recipeName)); // 1$ indicates the first argument of the string
+                                                                                         // -32 indicates a right padded string of 32 characters
+                System.out.print(" ID: " + String.format("%1$-6d", rid));
+                System.out.print(" Rating: " + String.format("%1$-4s", rating));
+                System.out.print(" Created By: " + String.format("%1$-32s", author));
+                System.out.println(" CreationDate: " + creationDate);
+            }
+        }
+        stmt.close();    
+    }
 }
 
