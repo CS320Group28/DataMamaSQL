@@ -78,6 +78,14 @@ public class DBInterface{
         }
     }
 
+    public PreparedStatement getScrollablePreparedStatement(String statementFormat){
+        try{
+            return connection.prepareStatement(statementFormat, ResultSet.TYPE_SCROLL_INSENSITIVE, ResultSet.CONCUR_READ_ONLY);
+        }catch(SQLException e){
+            return null;
+        }
+    }
+
     public Statement getStatement(){
         try {
             return connection.createStatement();

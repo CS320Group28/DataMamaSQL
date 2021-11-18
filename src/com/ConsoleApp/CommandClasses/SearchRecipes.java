@@ -384,5 +384,94 @@ public class SearchRecipes {
         }
         stmt.close();    
     }
+
+    /**
+     * The recipes that the user can make
+     * @param db DBInterface 
+     * @param user The user querying
+     */
+    public static void recipesUserCanMake(DBInterface db, User user) throws SQLException{
+
+        // get a map of all of the user's ingredients
+        String sql ="SELECT \"ingredientname\", SUM(\"quantitybought\")" +
+                    "FROM \"PutsIntoPantry\"" +
+                    "WHERE expirationdate > NOW() AND \"username\" = ? " +
+                    "GROUP BY \"ingredientname\"";
+
+        PreparedStatement stmt = db.getPreparedStatement(sql);
+        stmt.setString(1, user.getUserName());
+        ResultSet ingredentRS = db.execStatementQuery(stmt);
+
+        // Turn this set into a hashmap.
+        Map<String, Integer> ingredients = new HashMap<>();
+        while(ingredentRS.next()){
+            String name = ingredentRS.getString(1);
+            int count = ingredentRS.getInt(2);
+            ingredients.put(name, count);
+        }
+        stmt.close();
+        ingredentRS.close();
+
+        // Next, I'll just make a set of every single recipe id
+        String sql2 = "SELECT \"RecipeID\" FROM \"Recipe\"";
+        PreparedStatement stmt2 = db.getPreparedStatement(sql2);
+        ResultSet allRecipeID = db.execStatementQuery(stmt2);
+        Set<Integer> recipeIDs = new HashSet<>();
+        while(allRecipeID.next()){
+            recipeIDs.add(allRecipeID.getInt(1));
+        }
+        // lets try to not literally run out of memory
+        stmt2.close();
+        allRecipeID.close();
+
+        // next get all the recipes and their ingredients
+        String sql3 = "SELECT * FROM \"Requires\" INNER JOIN \"Recipe\" ON \"Requires\".\"recipeid\" = \"Recipe\".\"RecipeID\"" +
+                      "INNER JOIN \"Authors\" A on \"Recipe\".\"RecipeID\" = A.recipeid";
+        PreparedStatement stmt3 = db.getScrollablePreparedStatement(sql3);
+        ResultSet allRecipes = db.execStatementQuery(stmt3);
+
+        // remove the recipeID of the recipes that can not be made from the set.
+        while(allRecipes.next()){
+            int RID = allRecipes.getInt(1); //first should be a rid
+            String ingredientname = allRecipes.getString(2); // second should be ingredient name
+            int quantityNeeded = allRecipes.getInt(3);
+            
+            if(ingredients.containsKey(ingredientname) && ingredients.get(ingredientname) >= quantityNeeded){
+                continue;
+            }else{
+                recipeIDs.remove(RID); // can't make this
+            }
+        }
+        // move the curser for the recipes back to the start
+        allRecipes.beforeFirst();
+        recipeIDs.forEach(System.out::println);
+        // print the recipes
+        Set<Integer> alreadyPrinted = new HashSet<>();
+        while(allRecipes.next()){
+            int RID = allRecipes.getInt(1);
+            // if the recipe can be made and hasn't been printed yet.
+            if((alreadyPrinted.contains(RID) || (!recipeIDs.contains(RID)))){
+                continue;
+            }else{
+                alreadyPrinted.add(RID);
+                int recipeID = allRecipes.getInt("RecipeID");
+                String recipeName = allRecipes.getString("RecipeName");
+                String rating =  allRecipes.getString("Rating");
+                String creationDate = allRecipes.getString("CreationDate");
+                String author = allRecipes.getString("username");
+    
+                if(author == null){
+                    author = "Unknown Author";
+                }
+                System.out.print("RecipeName: " + String.format("RecipeName: %1$-32s", recipeName)); // 1$ indicates the first argument of the string
+                                                                                         // -32 indicates a right padded string of 32 characters
+                System.out.print(" ID: " + String.format("%1$-6d", recipeID));
+                System.out.print(" Rating: " + String.format("%1$-4s", rating));
+                System.out.print(" Created By: " + String.format("%1$-32s", author));
+                System.out.println(" CreationDate: " + creationDate);            }
+        }
+        allRecipes.close();
+        stmt3.close();
+    }
 }
 
