@@ -61,6 +61,7 @@ public class RateRecipes {
 
         PreparedStatement proc = db.getPreparedStatement("call updaterating( ? )");
         proc.setInt(1, rid);
+        proc.execute();
         proc.close();
     }
 }

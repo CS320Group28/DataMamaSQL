@@ -426,7 +426,7 @@ public class SearchRecipes {
 
         // next get all the recipes and their ingredients
         String sql3 = "SELECT * FROM \"Requires\" INNER JOIN \"Recipe\" ON \"Requires\".\"recipeid\" = \"Recipe\".\"RecipeID\"" +
-                      "INNER JOIN \"Authors\" A on \"Recipe\".\"RecipeID\" = A.recipeid";
+                      "INNER JOIN \"Authors\" A on \"Recipe\".\"RecipeID\" = A.recipeid ORDER BY \"Recipe\".\"Rating\" DESC;";
         PreparedStatement stmt3 = db.getScrollablePreparedStatement(sql3);
         ResultSet allRecipes = db.execStatementQuery(stmt3);
 
@@ -472,6 +472,17 @@ public class SearchRecipes {
         }
         allRecipes.close();
         stmt3.close();
+    }
+
+    /**
+     * Get the recipes that have been made by people who made the same recipes as a given user.
+     * This method does not and must not recurse otherwise all recipes will most certainly be printed.
+     * @param db DBInterface containing and instance of the database in use
+     * @param user User object of the user making the request.
+     * @throws SQLException
+     */
+    public static void getSuggestions(DBInterface db, User user) throws SQLException{
+        // First, get all of the recipes a 
     }
 }
 
