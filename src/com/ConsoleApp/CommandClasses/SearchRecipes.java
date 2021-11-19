@@ -468,7 +468,8 @@ public class SearchRecipes {
                 System.out.print(" ID: " + String.format("%1$-6d", recipeID));
                 System.out.print(" Rating: " + String.format("%1$-4s", rating));
                 System.out.print(" Created By: " + String.format("%1$-32s", author));
-                System.out.println(" CreationDate: " + creationDate);            }
+                System.out.println(" CreationDate: " + creationDate); 
+            }
         }
         allRecipes.close();
         stmt3.close();
@@ -477,12 +478,82 @@ public class SearchRecipes {
     /**
      * Get the recipes that have been made by people who made the same recipes as a given user.
      * This method does not and must not recurse otherwise all recipes will most certainly be printed.
+     * (Bare with me on this one)
      * @param db DBInterface containing and instance of the database in use
      * @param user User object of the user making the request.
      * @throws SQLException
      */
     public static void getSuggestions(DBInterface db, User user) throws SQLException{
-        // First, get all of the recipes a 
+        // First, get all of the recipes and the data needed for later
+        String sql = "SELECT * FROM \"Recipe\" " +
+                    "INNER JOIN \"Authors\" ON \"Recipe\".\"RecipeID\" = \"Authors\".\"recipeid\"" +
+                    "ORDER BY \"Recipe\".\"Rating\" DESC;";
+        PreparedStatement stmt = db.getPreparedStatement(sql);
+        ResultSet rs = db.execStatementQuery(stmt);
+
+        // get the makes relation
+        String sql2 = "SELECT * FROM \"Makes\"";
+        PreparedStatement stmt2 = db.getScrollablePreparedStatement(sql2);
+        ResultSet rs2 = db.execStatementQuery(stmt2);
+
+        // get the recipes that user has made, and then for each recipe, get the users that made the recipe and the recipes they made.
+        // all recipe ids to be printed
+        Set<Integer> recipes = new HashSet<>();
+        Set<String> users = new HashSet<>();
+        Suggestions(recipes, rs2, user.getUserName(), users);
+
+        // populate a temporary list so we don't literally implement breadth-first-search and find everything in the entire database
+        List<Integer> criticalRecipes = new ArrayList<>();
+        recipes.forEach(criticalRecipes::add);
+        // for each of the recipes made by the user, find it's siblings
+        for(int rid : criticalRecipes){
+            rs2.beforeFirst();
+            while(rs2.next()){
+                int RID = rs2.getInt(1);
+                if(RID == rid){
+                    String username = rs2.getString(2);
+                    if(!users.contains(username)){
+                        Suggestions(recipes, rs2, username, users);
+                    }
+                }
+            }
+        }
+
+        // for each recipe found, format and print it, using the large relation from above
+        while(rs.next()){
+            if(recipes.contains(rs.getInt(1))){
+                int recipeID = rs.getInt("RecipeID");
+                String recipeName = rs.getString("RecipeName");
+                String rating =  rs.getString("Rating");
+                String creationDate = rs.getString("CreationDate");
+                String author = rs.getString("username");
+    
+                if(author == null){
+                    author = "Unknown Author";
+                }
+                System.out.print("RecipeName: " + String.format("RecipeName: %1$-32s", recipeName)); // 1$ indicates the first argument of the string
+                                                                                         // -32 indicates a right padded string of 32 characters
+                System.out.print(" ID: " + String.format("%1$-6d", recipeID));
+                System.out.print(" Rating: " + String.format("%1$-4s", rating));
+                System.out.print(" Created By: " + String.format("%1$-32s", author));
+                System.out.println(" CreationDate: " + creationDate); 
+            }
+        }
+    }
+    public static void Suggestions(Set<Integer> recipes, ResultSet rs, String username, Set<String> users) throws SQLException{
+        if(users.contains(username)){
+            return;
+        }
+        users.add(username);
+
+        rs.beforeFirst();
+        while(rs.next()){
+            int RID = rs.getInt(1);
+            String user = rs.getString(2);
+            if(!recipes.contains(RID) && user.equals(username)){
+                recipes.add(RID);
+            }
+        }
     }
 }
 
