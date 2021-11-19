@@ -242,10 +242,11 @@ public class SearchRecipes {
                 int cookTime = rs.getInt("CookTime");
                 String steps = rs.getString("Steps");
                 int rating = rs.getInt("Rating");
-                int difficulty = rs.getInt("Difficulty");
+                int difficulty_i = rs.getInt("Difficulty");
                 int servings = rs.getInt("Servings");
+                Difficulty difficulty  = Difficulty.values()[difficulty_i];
                 LocalDateTime creationDate = rs.getTimestamp("CreationDate").toLocalDateTime();
-                System.out.println("You are viewing " + recipeName); // add "by ..."
+                System.out.println("\nYou are viewing " + recipeName + String.format(", %s", difficulty)); // add "by ..."
                 System.out.println("Description: " + description + "\n");
                 System.out.printf("This will take %d minutes.\n\n", cookTime);
                 System.out.println("STEPS");
@@ -256,7 +257,7 @@ public class SearchRecipes {
                 recipe.setCookTime(cookTime);
                 recipe.setCreationDate(creationDate);
                 recipe.setDescription(description);
-                recipe.setDifficulty(Difficulty.values()[difficulty]);
+                recipe.setDifficulty(difficulty);
                 recipe.setRating(rating);
                 recipe.setRecipeName(recipeName);
                 recipe.setServings(servings);
@@ -293,12 +294,12 @@ public class SearchRecipes {
             if(author == null){
                 author = "Unknown Author";
             }
-            System.out.print("RecipeName: " + String.format("RecipeName: %1$-32s", recipeName)); // 1$ indicates the first argument of the string
+            System.out.print("Recipe Name: " + String.format("%1$-32s", recipeName)); // 1$ indicates the first argument of the string
                                                                                      // -32 indicates a right padded string of 32 characters
             System.out.print(" ID: " + String.format("%1$-6d", recipeID));
             System.out.print(" Rating: " + String.format("%1$-4s", rating));
             System.out.print(" Created By: " + String.format("%1$-32s", author));
-            System.out.println(" CreationDate: " + creationDate);
+            System.out.println(" CreationDate: " + creationDate); 
         }
     }
 
@@ -331,21 +332,23 @@ public class SearchRecipes {
 
         for (int i = 0; i < 50; i++){
             if(rs.next()){
-                int rid = rs.getInt("RecipeID");
+                int recipeID = rs.getInt("RecipeID");
                 String recipeName = rs.getString("RecipeName");
                 String rating =  rs.getString("Rating");
                 String creationDate = rs.getString("CreationDate");
                 String author = rs.getString("username");
-    
+                int diffindex = rs.getInt("Difficulty");
+                Difficulty difficulty = Difficulty.values()[diffindex];
                 if(author == null){
                     author = "Unknown Author";
                 }
-                System.out.print("RecipeName: " + String.format("RecipeName: %1$-32s", recipeName)); // 1$ indicates the first argument of the string
+                System.out.print("Recipe Name: " + String.format("%1$-32s", recipeName)); // 1$ indicates the first argument of the string
                                                                                          // -32 indicates a right padded string of 32 characters
-                System.out.print(" ID: " + String.format("%1$-6d", rid));
+                System.out.print(" Difficulty: " + String.format("%1$-10s", difficulty));
+                System.out.print(" ID: " + String.format("%1$-6d", recipeID));
                 System.out.print(" Rating: " + String.format("%1$-4s", rating));
                 System.out.print(" Created By: " + String.format("%1$-32s", author));
-                System.out.println(" CreationDate: " + creationDate);
+                System.out.println(" CreationDate: " + creationDate); 
             }
         }
         stmt.close();
@@ -365,21 +368,23 @@ public class SearchRecipes {
 
         for (int i = 0; i < 50; i++){
             if(rs.next()){
-                int rid = rs.getInt("RecipeID");
+                int recipeID = rs.getInt("RecipeID");
                 String recipeName = rs.getString("RecipeName");
                 String rating =  rs.getString("Rating");
                 String creationDate = rs.getString("CreationDate");
                 String author = rs.getString("username");
-    
+                int diffindex = rs.getInt("Difficulty");
+                Difficulty difficulty = Difficulty.values()[diffindex];
                 if(author == null){
                     author = "Unknown Author";
                 }
-                System.out.print("RecipeName: " + String.format("RecipeName: %1$-32s", recipeName)); // 1$ indicates the first argument of the string
+                System.out.print("Recipe Name: " + String.format("%1$-32s", recipeName)); // 1$ indicates the first argument of the string
                                                                                          // -32 indicates a right padded string of 32 characters
-                System.out.print(" ID: " + String.format("%1$-6d", rid));
+                System.out.print(" Difficulty: " + String.format("%1$-10s", difficulty));
+                System.out.print(" ID: " + String.format("%1$-6d", recipeID));
                 System.out.print(" Rating: " + String.format("%1$-4s", rating));
                 System.out.print(" Created By: " + String.format("%1$-32s", author));
-                System.out.println(" CreationDate: " + creationDate);
+                System.out.println(" CreationDate: " + creationDate); 
             }
         }
         stmt.close();    
@@ -444,7 +449,6 @@ public class SearchRecipes {
         }
         // move the curser for the recipes back to the start
         allRecipes.beforeFirst();
-        recipeIDs.forEach(System.out::println);
         // print the recipes
         Set<Integer> alreadyPrinted = new HashSet<>();
         while(allRecipes.next()){
@@ -459,12 +463,14 @@ public class SearchRecipes {
                 String rating =  allRecipes.getString("Rating");
                 String creationDate = allRecipes.getString("CreationDate");
                 String author = allRecipes.getString("username");
-    
+                int diffindex = allRecipes.getInt("Difficulty");
+                Difficulty difficulty = Difficulty.values()[diffindex];
                 if(author == null){
                     author = "Unknown Author";
                 }
-                System.out.print("RecipeName: " + String.format("RecipeName: %1$-32s", recipeName)); // 1$ indicates the first argument of the string
+                System.out.print("Recipe Name: " + String.format("%1$-32s", recipeName)); // 1$ indicates the first argument of the string
                                                                                          // -32 indicates a right padded string of 32 characters
+                System.out.print(" Difficulty: " + String.format("%1$-10s", difficulty));
                 System.out.print(" ID: " + String.format("%1$-6d", recipeID));
                 System.out.print(" Rating: " + String.format("%1$-4s", rating));
                 System.out.print(" Created By: " + String.format("%1$-32s", author));
@@ -527,12 +533,14 @@ public class SearchRecipes {
                 String rating =  rs.getString("Rating");
                 String creationDate = rs.getString("CreationDate");
                 String author = rs.getString("username");
-    
+                int diffindex = rs.getInt("Difficulty");
+                Difficulty difficulty = Difficulty.values()[diffindex];
                 if(author == null){
                     author = "Unknown Author";
                 }
-                System.out.print("RecipeName: " + String.format("RecipeName: %1$-32s", recipeName)); // 1$ indicates the first argument of the string
+                System.out.print("Recipe Name: " + String.format("%1$-32s", recipeName)); // 1$ indicates the first argument of the string
                                                                                          // -32 indicates a right padded string of 32 characters
+                System.out.print(" Difficulty: " + String.format("%1$-10s", difficulty));
                 System.out.print(" ID: " + String.format("%1$-6d", recipeID));
                 System.out.print(" Rating: " + String.format("%1$-4s", rating));
                 System.out.print(" Created By: " + String.format("%1$-32s", author));
@@ -540,7 +548,16 @@ public class SearchRecipes {
             }
         }
     }
-    public static void Suggestions(Set<Integer> recipes, ResultSet rs, String username, Set<String> users) throws SQLException{
+
+    /**
+     * Find all of the recipes made by the given user and add to master set
+     * @param recipes recipeID set
+     * @param rs resultset of Makes relation
+     * @param username Username of the user to search for
+     * @param users User Set for efficiency
+     * @throws SQLException
+     */
+    private static void Suggestions(Set<Integer> recipes, ResultSet rs, String username, Set<String> users) throws SQLException{
         if(users.contains(username)){
             return;
         }
