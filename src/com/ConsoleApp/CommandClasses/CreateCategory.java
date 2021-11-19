@@ -28,7 +28,6 @@ public class CreateCategory {
         ctMap.put("categoryName", categoryName);
         ct.configEntity(ctMap);
 
-
         PreparedStatement stmt = db.getPreparedStatement("SELECT * FROM \"Category\" where \"CategoryName\" = ?");
         ResultSet rs = null;
 
@@ -48,9 +47,5 @@ public class CreateCategory {
         ct.InsertEntity();
         System.out.println("Category Successfully Created");
         return;
-
-
-
     }
-
 }

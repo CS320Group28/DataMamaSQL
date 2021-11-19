@@ -9,6 +9,14 @@ import java.sql.SQLException;
 import java.util.Scanner;
 
 public class EditRecipe {
+
+    /**
+     * CLI for editing a given recipe
+     * @param user
+     * @param recipe
+     * @param db
+     * @throws SQLException
+     */
     public static void EditRecipeCLI(User user, Recipe recipe, DBInterface db) throws SQLException {
         Scanner scan = new Scanner(System.in);
         boolean valid = false;
@@ -76,6 +84,12 @@ public class EditRecipe {
             }
         }
     }
+
+    /**
+     * Helper function for getting steps for a recipe
+     * @param scan
+     * @return
+     */
     private static String stepsLoop(Scanner scan){
         String steps = "";
         String clause = "";
@@ -91,6 +105,12 @@ public class EditRecipe {
         return sb.toString();
     }
 
+    /**
+     * Helper function for removing an ingredient from requires.
+     * @param db
+     * @param recipeID
+     * @throws SQLException
+     */
     private static void deleteRequiredIngredients(DBInterface db, int recipeID) throws SQLException{
         String sql = "Delete from \"Requires\" where \"recipeid\" = ?";
         PreparedStatement stmt = db.getPreparedStatement(sql);

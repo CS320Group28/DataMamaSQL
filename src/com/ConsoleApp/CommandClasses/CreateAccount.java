@@ -12,12 +12,18 @@ import com.DBInterface;
 import com.EntityClasses.User;
 
 public class CreateAccount {
+
+    /// scanner will be closed at the end by driver.
+
     private static final Scanner in = new Scanner(System.in);
 
+    /**
+     * CLI for creating an account
+     * @param db
+     */
     public static void CreateAccountCLI(DBInterface db){
 
         while(true){
-
             System.out.print("Enter a username: ");
             String username = in.next();
             System.out.print("Enter a password: ");
@@ -46,9 +52,6 @@ public class CreateAccount {
             user.InsertEntity();
             System.out.println("User Successfully Created");
             return;
-
         }
-        
     }
-    
 }

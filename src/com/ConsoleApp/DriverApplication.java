@@ -8,18 +8,21 @@ import com.ConsoleApp.CommandClasses.*;
 import com.EntityClasses.Recipe;
 import com.EntityClasses.User;
 
+/**
+ * Main class for the application with a static loop
+ */
 public class DriverApplication {
 
-    /**
-     * We can create instance of the commandclass to inject the db into, which contains the logic for interacting with the database.
-     * 
-     * We can then pass the db to the entity that is created in the commandclass.
-     */
-
+    /// The only DBInterface object with a connection
     private static final DBInterface db = new DBInterface();
+
+    /// The scanner object on System.in
     private static final Scanner scan = new Scanner(System.in);
 
-
+    /**
+     * Main loop for the application
+     * @param args not used
+     */
     public static void main (String[] args) {
         boolean close = false;
         int select;

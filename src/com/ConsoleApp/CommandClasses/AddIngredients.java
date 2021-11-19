@@ -19,8 +19,14 @@ public class AddIngredients {
 
     private static final Scanner scan = new Scanner(System.in);
 
-    // parse dates as mm/dd/yyyy
+    /// parse dates as mm/dd/yyyy
     private static final DateTimeFormatter formatter = DateTimeFormatter.ofPattern("MM/dd/uuuu");
+
+    /**
+     * CLI for making a transaction into the pantry
+     * @param db DBInterface with connection to the database
+     * @param user user making the transaction
+     */
     public static void AddIngredientsCLI(DBInterface db, User user){
         System.out.println("Enter Ingredients to add to your pantry below");
         String ingredient = "";
@@ -126,5 +132,4 @@ public class AddIngredients {
             }
         }
     }
-    
 }

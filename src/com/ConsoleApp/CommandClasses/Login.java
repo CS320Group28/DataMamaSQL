@@ -13,6 +13,11 @@ import static com.ConsoleApp.CommandClasses.CreateAccount.CreateAccountCLI;
 public class Login {
     private static final Scanner in = new Scanner(System.in);
 
+    /**
+     * CLI to be displayed as a welcome, first thing seen.
+     * @param db
+     * @return
+     */
     public static ArrayList<Object> WelcomeCLI(DBInterface db){
 
         boolean exit = false;
@@ -77,6 +82,11 @@ public class Login {
         return results;
     }
 
+    /**
+     * CLI for a user to login to the database
+     * @param db
+     * @return
+     */
     public static User LoginCLI(DBInterface db){
         //allow the user to enter the username and password
         System.out.println("RecipeMate Login");
@@ -113,7 +123,12 @@ public class Login {
         return user;
     }
 
-    //update the last login for the user if the login is successful
+    /**
+     * Update the lastAccessDate of a user 
+     * @param db 
+     * @param user
+     * @return
+     */
     private static boolean updateLastLogin(DBInterface db, User user){
         User temp = new User(db);
         temp.setUserName(user.getUserName());
@@ -121,17 +136,5 @@ public class Login {
         temp.setCreationDate(user.getCreationDate());
         temp.setLastAccessDate(LocalDateTime.now());
         return temp.UpdateEntity();
-    }
-
-    //this was user for testing the loop without running it inside the main program loop
-    public static void main(String[] args){
-        DBInterface db = new DBInterface();
-        WelcomeCLI(db);
-        try {
-            db.endSSH();
-        }
-        catch(SQLException e){
-            System.out.println(e.getMessage());
-        }
     }
 }

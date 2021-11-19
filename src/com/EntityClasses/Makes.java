@@ -8,6 +8,7 @@ import java.time.LocalDate;
 import java.util.Map;
 
 public class Makes implements EntityType<Makes>{
+    
     private int recipeID;
     private String username;
     private double quantityMade;

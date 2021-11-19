@@ -18,20 +18,19 @@ import com.EntityClasses.User;
 public class MakeRecipe {
 
 
+    /**
+     * CLI for making a recipe
+     * @param db
+     * @param user User making the recipe
+     * @param recipe Recipe object to try to make
+     * @param scale Scale the ingredients
+     * @throws SQLException
+     */
     public static void makeRecipe(DBInterface db, User user, Recipe recipe, double scale) throws SQLException{
-        //first
-/**
+        /**
          * First: get the required ingredients and their quantities.
-         *        select ingredientname, quantity from requires where recipeid = recipeid
-         *        save all of this is something like a hashmap
-         *          *          (POTENTIALLY ALGORITHMICALLY DETERMINE PROPER SCALING, MAKING SURE THE SCALE ISN'T TOO LOW TO MAKE INGREDIENTS 0)
-         *
-         *        scale ingredients by scalefactor (consider finding a way to keep the proportions right..)
-         *  DONE
+         *        scale ingredients by scalefactor 
          */
-        ////////////////////////////////////////////////////////////////////////////
-
-        
         Map<String, Integer> ingredientToQuantity = new HashMap<>();
         PreparedStatement stmt = db.getPreparedStatement("select * from \"Requires\" where \"recipeid\" = ?");
         ResultSet ingredientset;
@@ -47,14 +46,11 @@ public class MakeRecipe {
         // python-like line for scaling all of the ingredients in the map; problem, the proportions could be off now.
         ingredientToQuantity.keySet().forEach((String key) -> ingredientToQuantity.put(key, (int)(ingredientToQuantity.get(key) * scale)));
         stmt.close();
-        
 
          /**
          * Second: perform queries to make user user.username() has the right number of every ingredient.
          *  this might be faster with a join, not sure, too complicated.
          *       for each key in map<String, int>
-         *  
-         * 
          *          query select currentquantity where username=user.getname and ingredientname = ingredient.getname()
          *          for each currentquantity
             *          neededquantity -= currentquantity

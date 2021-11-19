@@ -19,10 +19,18 @@ public class Ingredient implements EntityType<Ingredient>{
         this.db = db;
     }
 
+    /**
+     * Getter for ingredient's name
+     * @return ingredientname String
+     */
     public String getIngredientName(){
         return this.ingredientName;
     }
 
+    /**
+     * Setter for ingredient's name
+     * @param name
+     */
     public void setIngredientName(String name){
         this.ingredientName = name;
     }
