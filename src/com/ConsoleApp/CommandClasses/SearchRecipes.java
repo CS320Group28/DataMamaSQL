@@ -35,7 +35,7 @@ public class SearchRecipes {
             case 1:
                 try {
                     System.out.println("sorting by name alphabetically...");
-                    PreparedStatement stmt = db.getPreparedStatement("select \"Authors\".\"username\", \"Recipe\".\"RecipeID\", \"Recipe\".\"RecipeName\", \"Recipe\".\"Rating\", \"Recipe\".\"CreationDate\" from \"Recipe\" inner join \"Authors\" on \"Authors\".\"recipeid\" = \"Recipe\".\"RecipeID\"" +
+                    PreparedStatement stmt = db.getPreparedStatement("select * from \"Recipe\" inner join \"Authors\" on \"Authors\".\"recipeid\" = \"Recipe\".\"RecipeID\"" +
                             "order by \"RecipeName\" asc;");
                     ResultSet rs = null;
                     rs=db.execStatementQuery(stmt);
@@ -50,7 +50,7 @@ public class SearchRecipes {
             case 2:
                 try {
                     System.out.println("sorting by name reverse alphabetically...");
-                    PreparedStatement stmt = db.getPreparedStatement("select \"Authors\".\"username\", \"Recipe\".\"RecipeID\", \"Recipe\".\"RecipeName\", \"Recipe\".\"Rating\", \"Recipe\".\"CreationDate\" from \"Recipe\" inner join \"Authors\" on \"Authors\".\"recipeid\" = \"Recipe\".\"RecipeID\"" +
+                    PreparedStatement stmt = db.getPreparedStatement("select * from \"Recipe\" inner join \"Authors\" on \"Authors\".\"recipeid\" = \"Recipe\".\"RecipeID\"" +
                             "order by \"RecipeName\" desc;");
                     ResultSet rs = null;
                     rs=db.execStatementQuery(stmt);
@@ -82,7 +82,7 @@ public class SearchRecipes {
             case 1:
                 try{
                     System.out.println("sorting by lowest rated...");
-                    PreparedStatement stmt = db.getPreparedStatement("select \"Authors\".\"username\", \"Recipe\".\"RecipeID\", \"Recipe\".\"RecipeName\", \"Recipe\".\"Rating\", \"Recipe\".\"CreationDate\" from \"Recipe\" inner join \"Authors\" on \"Authors\".\"recipeid\" = \"Recipe\".\"RecipeID\"" +
+                    PreparedStatement stmt = db.getPreparedStatement("select * from \"Recipe\" inner join \"Authors\" on \"Authors\".\"recipeid\" = \"Recipe\".\"RecipeID\"" +
                             "order by \"Rating\" asc;");
                     ResultSet rs = null;
                     rs=db.execStatementQuery(stmt);
@@ -98,7 +98,7 @@ public class SearchRecipes {
             case 2:
                 try{
                     System.out.println("sorting by highest rated...");
-                    PreparedStatement stmt = db.getPreparedStatement("select \"Authors\".\"username\", \"Recipe\".\"RecipeID\", \"Recipe\".\"RecipeName\", \"Recipe\".\"Rating\", \"Recipe\".\"CreationDate\" from \"Recipe\" inner join \"Authors\" on \"Authors\".\"recipeid\" = \"Recipe\".\"RecipeID\"" +
+                    PreparedStatement stmt = db.getPreparedStatement("select * from \"Recipe\" inner join \"Authors\" on \"Authors\".\"recipeid\" = \"Recipe\".\"RecipeID\"" +
                             "order by \"Rating\" desc;");
                     ResultSet rs = null;
                     rs=db.execStatementQuery(stmt);
@@ -130,7 +130,7 @@ public class SearchRecipes {
             case 1:
                 try{
                     System.out.println("sorting by oldest...");
-                    PreparedStatement stmt = db.getPreparedStatement("select \"Authors\".\"username\", \"Recipe\".\"RecipeID\", \"Recipe\".\"RecipeName\", \"Recipe\".\"Rating\", \"Recipe\".\"CreationDate\" from \"Recipe\" inner join \"Authors\" on \"Authors\".\"recipeid\" = \"Recipe\".\"RecipeID\"" +
+                    PreparedStatement stmt = db.getPreparedStatement("select * from \"Recipe\" inner join \"Authors\" on \"Authors\".\"recipeid\" = \"Recipe\".\"RecipeID\"" +
                             "order by \"CreationDate\" asc;");
                     ResultSet rs = null;
                     rs=db.execStatementQuery(stmt);
@@ -147,7 +147,7 @@ public class SearchRecipes {
             case 2:
                 try{
                     System.out.println("sorting by newest...");
-                    PreparedStatement stmt = db.getPreparedStatement("select \"Authors\".\"username\", \"Recipe\".\"RecipeID\", \"Recipe\".\"RecipeName\", \"Recipe\".\"Rating\", \"Recipe\".\"CreationDate\" from \"Recipe\" inner join \"Authors\" on \"Authors\".\"recipeid\" = \"Recipe\".\"RecipeID\"" +
+                    PreparedStatement stmt = db.getPreparedStatement("select * from \"Recipe\" inner join \"Authors\" on \"Authors\".\"recipeid\" = \"Recipe\".\"RecipeID\"" +
                             "order by \"CreationDate\" desc;");
                     ResultSet rs = null;
                     rs=db.execStatementQuery(stmt);
@@ -198,7 +198,7 @@ public class SearchRecipes {
         
         try{
             System.out.printf("Searching database for %s...\n", name);
-            String sql = String.format("select \"Authors\".\"username\", \"Recipe\".\"RecipeID\", \"Recipe\".\"RecipeName\", \"Recipe\".\"Rating\", \"Recipe\".\"CreationDate\" from \"Recipe\" inner join \"Authors\" on \"Authors\".\"recipeid\" = \"Recipe\".\"RecipeID\" where lower(\"RecipeName\") like '%%%s%%' order by \"Recipe\".\"RecipeName\"", name.toLowerCase());
+            String sql = String.format("select * from \"Recipe\" inner join \"Authors\" on \"Authors\".\"recipeid\" = \"Recipe\".\"RecipeID\" where lower(\"RecipeName\") like '%%%s%%' order by \"Recipe\".\"RecipeName\"", name.toLowerCase());
             Statement stmt = db.getStatement();
             formatRS(stmt.executeQuery(sql));
             stmt.close();
@@ -290,12 +290,16 @@ public class SearchRecipes {
             String rating =  rs.getString("Rating");
             String creationDate = rs.getString("CreationDate");
             String author = rs.getString("username");
+            int diffindex = rs.getInt("Difficulty");
+            Difficulty difficulty = Difficulty.values()[diffindex];
 
             if(author == null){
                 author = "Unknown Author";
             }
             System.out.print("Recipe Name: " + String.format("%1$-32s", recipeName)); // 1$ indicates the first argument of the string
                                                                                      // -32 indicates a right padded string of 32 characters
+            System.out.print(" Difficulty: " + String.format("%1$-10s", difficulty));
+
             System.out.print(" ID: " + String.format("%1$-6d", recipeID));
             System.out.print(" Rating: " + String.format("%1$-4s", rating));
             System.out.print(" Created By: " + String.format("%1$-32s", author));
@@ -326,31 +330,13 @@ public class SearchRecipes {
      */
     public static void topFiftyRecipes(DBInterface db) throws SQLException{
         System.out.println("Grabbing highest rated recipes...");
-        String sql = "SELECT * FROM \"Recipe\" INNER JOIN \"Authors\" ON \"Authors\".\"recipeid\" = \"Recipe\".\"RecipeID\" ORDER BY \"Recipe\".\"Rating\" DESC";
+        String sql = "SELECT * FROM \"Recipe\" INNER JOIN \"Authors\" ON \"Authors\".\"recipeid\" = \"Recipe\".\"RecipeID\" ORDER BY \"Recipe\".\"Rating\" DESC" +
+                     " LIMIT 50";
         Statement stmt = db.getStatement();
         ResultSet rs = stmt.executeQuery(sql);
 
-        for (int i = 0; i < 50; i++){
-            if(rs.next()){
-                int recipeID = rs.getInt("RecipeID");
-                String recipeName = rs.getString("RecipeName");
-                String rating =  rs.getString("Rating");
-                String creationDate = rs.getString("CreationDate");
-                String author = rs.getString("username");
-                int diffindex = rs.getInt("Difficulty");
-                Difficulty difficulty = Difficulty.values()[diffindex];
-                if(author == null){
-                    author = "Unknown Author";
-                }
-                System.out.print("Recipe Name: " + String.format("%1$-32s", recipeName)); // 1$ indicates the first argument of the string
-                                                                                         // -32 indicates a right padded string of 32 characters
-                System.out.print(" Difficulty: " + String.format("%1$-10s", difficulty));
-                System.out.print(" ID: " + String.format("%1$-6d", recipeID));
-                System.out.print(" Rating: " + String.format("%1$-4s", rating));
-                System.out.print(" Created By: " + String.format("%1$-32s", author));
-                System.out.println(" CreationDate: " + creationDate); 
-            }
-        }
+        formatRS(rs);
+
         stmt.close();
     }
 
@@ -361,32 +347,13 @@ public class SearchRecipes {
      */
     public static void topFiftyNewestRecipes(DBInterface db) throws SQLException{
         System.out.println("Grabbing the newest recipes...");
-        String sql = "SELECT * FROM \"Recipe\" INNER JOIN \"Authors\" ON \"Authors\".\"recipeid\" = \"Recipe\".\"RecipeID\" ORDER BY \"Recipe\".\"CreationDate\" DESC";
+        String sql = "SELECT * FROM \"Recipe\" INNER JOIN \"Authors\" ON \"Authors\".\"recipeid\" = \"Recipe\".\"RecipeID\" ORDER BY \"Recipe\".\"CreationDate\" DESC" +
+                    " LIMIT 50;";
     
         Statement stmt = db.getStatement();
         ResultSet rs = stmt.executeQuery(sql);
 
-        for (int i = 0; i < 50; i++){
-            if(rs.next()){
-                int recipeID = rs.getInt("RecipeID");
-                String recipeName = rs.getString("RecipeName");
-                String rating =  rs.getString("Rating");
-                String creationDate = rs.getString("CreationDate");
-                String author = rs.getString("username");
-                int diffindex = rs.getInt("Difficulty");
-                Difficulty difficulty = Difficulty.values()[diffindex];
-                if(author == null){
-                    author = "Unknown Author";
-                }
-                System.out.print("Recipe Name: " + String.format("%1$-32s", recipeName)); // 1$ indicates the first argument of the string
-                                                                                         // -32 indicates a right padded string of 32 characters
-                System.out.print(" Difficulty: " + String.format("%1$-10s", difficulty));
-                System.out.print(" ID: " + String.format("%1$-6d", recipeID));
-                System.out.print(" Rating: " + String.format("%1$-4s", rating));
-                System.out.print(" Created By: " + String.format("%1$-32s", author));
-                System.out.println(" CreationDate: " + creationDate); 
-            }
-        }
+        formatRS(rs);
         stmt.close();    
     }
 
