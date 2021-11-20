@@ -5,3 +5,7 @@ out
 src/com/config.txt
 .vscode
 *.jar
+.ipynb_checkpoints
+*.csv
+*.ipynb
+/analysis/*.html
