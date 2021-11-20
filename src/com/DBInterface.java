@@ -4,7 +4,6 @@ import java.io.BufferedReader;
 import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.io.IOException;
-import java.sql.CallableStatement;
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.PreparedStatement;
@@ -20,10 +19,19 @@ import com.jcraft.jsch.Session;
 // Class for setting up and interacting with DB
 
 public class DBInterface{
+
+    /// Static variable for database name
     private static final String DBNAME = "p320_30";
+    
+    /// connection object for database
     private Connection connection;
+
+    /// session object for databse
     private Session session;
     
+    /**
+     * DBInterface constructor automatically uses config.txt
+     */
     public DBInterface(){
         try(
             BufferedReader br = new BufferedReader(
@@ -70,6 +78,12 @@ public class DBInterface{
         }
         Objects.requireNonNull(this.connection, "Connection not successfully retrieved");
     }
+
+    /**
+     * Gets a prepared statement to the database with a query
+     * @param statementFormat sql query
+     * @return PreparedStatement
+     */
     public PreparedStatement getPreparedStatement(String statementFormat){
         try{
             return connection.prepareStatement(statementFormat);
@@ -78,6 +92,11 @@ public class DBInterface{
         }
     }
 
+    /**
+     * Gets a prepared statement with query that can be rewound
+     * @param statementFormat sql query
+     * @return PreparedStatement
+     */
     public PreparedStatement getScrollablePreparedStatement(String statementFormat){
         try{
             return connection.prepareStatement(statementFormat, ResultSet.TYPE_SCROLL_INSENSITIVE, ResultSet.CONCUR_READ_ONLY);
@@ -86,6 +105,10 @@ public class DBInterface{
         }
     }
 
+    /**
+     * Gets a Statement object for database
+     * @return Statement
+     */
     public Statement getStatement(){
         try {
             return connection.createStatement();
@@ -94,15 +117,30 @@ public class DBInterface{
         }
     }
 
+    /**
+     * Executes a PreparedStatement on the database for a Query
+     * @param stmt 
+     * @return ResultSet 
+     * @throws SQLException
+     */
     public ResultSet execStatementQuery(PreparedStatement stmt) throws SQLException{
         return stmt.executeQuery();
     }
     
+    /**
+     * Executes a PreparedStatement for an update/deletion
+     * @param stmt
+     * @throws SQLException
+     */
     public void execStatementUpdate(PreparedStatement stmt) throws SQLException{
         stmt.executeUpdate();
         stmt.close();
     }
 
+    /**
+     * Ends the SSH session to the database
+     * @throws SQLException
+     */
     public void endSSH() throws SQLException{
         if (connection != null && !connection.isClosed()) {
             System.out.println("Closing Database Connection");
